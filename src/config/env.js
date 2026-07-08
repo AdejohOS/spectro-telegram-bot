@@ -1,17 +1,18 @@
-import dotenv from "dotenv";
+import "dotenv/config";
+import { z } from "zod";
 
-dotenv.config();
+const envSchema = z.object({
+  BOT_TOKEN: z.string().min(1),
 
-export const env = {
-  botToken: process.env.BOT_TOKEN,
+  DB_HOST: z.string(),
+  DB_PORT: z.coerce.number(),
+  DB_USER: z.string(),
+  DB_PASSWORD: z.string(),
+  DB_NAME: z.string(),
 
-  db: {
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-  },
+  NODE_ENV: z
+    .enum(["development", "production", "test"])
+    .default("development"),
+});
 
-  nodeEnv: process.env.NODE_ENV ?? "development",
-};
+export const env = envSchema.parse(process.env);

@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon src/app.js",
     "start": "node src/app.js",
+    "generate": "drizzle-kit generate",
     "migrate": "node src/database/migrate.js"
   },
   "keywords": [],
