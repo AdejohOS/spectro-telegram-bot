@@ -80,4 +80,69 @@ export class OrderService {
       limit,
     };
   }
+  static async updateStatus(orderId, status) {
+    return db.transaction(async (tx) => {
+      const order = await OrderRepository.findById(orderId);
+
+      if (!order) {
+        throw new Error("Order not found.");
+      }
+
+      const extra = {};
+
+      switch (status) {
+        case ORDER_STATUS.PROCESSING:
+          extra.processingAt = new Date();
+          break;
+
+        case ORDER_STATUS.SHIPPED:
+          extra.shippedAt = new Date();
+          break;
+
+        case ORDER_STATUS.DELIVERED:
+          extra.deliveredAt = new Date();
+          break;
+
+        case ORDER_STATUS.COMPLETED:
+          extra.completedAt = new Date();
+          break;
+      }
+
+      return OrderRepository.updateStatus(tx, orderId, status, extra);
+    });
+  }
+  static async complete(orderId) {
+    return db.transaction(async (tx) => {
+      const order = await OrderRepository.findById(orderId);
+
+      if (!order) {
+        throw new Error("Order not found.");
+      }
+
+      if (order.status !== ORDER_STATUS.DELIVERED) {
+        throw new Error("Order is not ready for completion.");
+      }
+
+      await WalletService.releaseOrderFunds(tx, {
+        userId: order.buyerId,
+
+        amount: order.amount,
+
+        reference: order.orderNumber,
+
+        notes: "Shop Order Completed",
+      });
+
+      const updated = await OrderRepository.updateStatus(
+        tx,
+        order.id,
+        ORDER_STATUS.COMPLETED,
+        {
+          completedAt: new Date(),
+        },
+      );
+
+      return updated;
+    });
+  }
 }

@@ -1,4 +1,5 @@
 import { Markup } from "telegraf";
+import { formatMoney } from "../../utils/money.js";
 
 export function adminOrdersKeyboard() {
   return Markup.inlineKeyboard([
@@ -64,6 +65,9 @@ export function orderListKeyboard(status, page, totalPages, orders) {
 
   return Markup.inlineKeyboard(buttons);
 }
+
+import { ORDER_STATUS } from "../shop/product.status.js";
+
 export function orderDetailsKeyboard(order) {
   const buttons = [];
 
@@ -98,4 +102,10 @@ export function orderDetailsKeyboard(order) {
   ]);
 
   return Markup.inlineKeyboard(buttons);
+}
+export function buyerDeliveredKeyboard(orderId) {
+  return Markup.inlineKeyboard([
+    [Markup.button.callback("✅ Confirm Delivery", `CONFIRM_ORDER:${orderId}`)],
+    [Markup.button.callback("⚖️ Report Problem", `DISPUTE_ORDER:${orderId}`)],
+  ]);
 }

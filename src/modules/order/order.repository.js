@@ -90,4 +90,17 @@ export class OrderRepository {
 
     return order ?? null;
   }
+  static async updateStatus(tx, orderId, status, extra = {}) {
+    const [order] = await tx
+      .update(orders)
+      .set({
+        status,
+        ...extra,
+        updatedAt: new Date(),
+      })
+      .where(eq(orders.id, orderId))
+      .returning();
+
+    return order;
+  }
 }
