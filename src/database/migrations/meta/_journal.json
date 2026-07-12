@@ -15,6 +15,97 @@
       "when": 1783519800508,
       "tag": "0001_luxuriant_rockslide",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783551573178,
+      "tag": "0002_smart_iron_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1783585042653,
+      "tag": "0003_absent_namorita",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1783607463789,
+      "tag": "0004_overjoyed_drax",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1783609450449,
+      "tag": "0005_worried_umar",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1783611947861,
+      "tag": "0006_colossal_revanche",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1783622239590,
+      "tag": "0007_plain_rogue",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1783642192049,
+      "tag": "0008_goofy_kree",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1783690917204,
+      "tag": "0009_wealthy_johnny_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1783698472831,
+      "tag": "0010_majestic_skaar",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1783767277414,
+      "tag": "0011_foamy_bishop",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1783777724564,
+      "tag": "0012_boring_centennial",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1783800042506,
+      "tag": "0013_far_boomer",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1783865051600,
+      "tag": "0014_previous_shotgun",
+      "breakpoints": true
     }
   ]
 }

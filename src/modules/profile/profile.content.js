@@ -13,6 +13,7 @@ export function profileMessage(profile) {
 💰 *Wallet*
 
 Available: *$${wallet.balance.toLocaleString()}*
+Locked: *$${wallet.locked.toLocaleString()}*
 
 ━━━━━━━━━━━━━━━━━━
 

@@ -6,7 +6,7 @@ export function registerRulesAction(bot) {
     await ctx.answerCbQuery();
 
     await ctx.editMessageText(RULES_MESSAGE, {
-      parse_mode: "Markdown",
+      parse_mode: "HTML",
       reply_markup: backKeyboard().reply_markup,
     });
   });

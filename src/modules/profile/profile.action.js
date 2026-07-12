@@ -1,6 +1,6 @@
-import { getProfile } from "../services/profile.service.js";
-import { profileMessage } from "../content/profile.js";
-import { backKeyboard } from "../bot/keyboards/back.keyboard.js";
+import { getProfile } from "./profile.service.js";
+import { profileMessage } from "./profile.content.js";
+import { backKeyboard } from "../../bot/keyboards/back.keyboard.js";
 
 export function registerProfileHandler(bot) {
   bot.action("PROFILE", async (ctx) => {

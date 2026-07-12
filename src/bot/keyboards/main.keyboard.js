@@ -1,15 +1,16 @@
 import { Markup } from "telegraf";
+import { isAdmin } from "../../config/admin.js";
 
-export function mainKeyboard() {
-  return Markup.inlineKeyboard([
-    [Markup.button.callback("💼 Create Escrow", "CREATE_ESCROW")],
+export function mainKeyboard(telegramId) {
+  const keyboard = [
+    [Markup.button.callback("💼 Escrow", "ESCROW_PANEL")],
     [
-      Markup.button.callback("💵 Deposit", "DEPOSIT"),
-      Markup.button.callback("🛒 Shop", "SHOP"),
+      Markup.button.callback("➕ Deposit", "DEPOSIT"),
+      Markup.button.callback("➖ Withdrawal", "WITHDRAWAL_MENU"),
     ],
     [
       Markup.button.callback("👛 Wallet", "WALLET"),
-      Markup.button.callback("📜 History", "HISTORY"),
+      Markup.button.callback("🛒 Shop", "SHOP"),
     ],
     [
       Markup.button.callback("👤 Profile", "PROFILE"),
@@ -20,8 +21,14 @@ export function mainKeyboard() {
       Markup.button.callback("❓ Help", "HELP"),
     ],
     [
-      Markup.button.callback("🌐 Community", "COMMUNITY"),
-      Markup.button.callback("📞 Support", "SUPPORT"),
+      Markup.button.url("🌐 Community", "https://t.me/Spectromileschat"),
+      Markup.button.url("📞 Support", "https://t.me/Spectroassist"),
     ],
-  ]);
+  ];
+
+  if (isAdmin(telegramId)) {
+    keyboard.push([Markup.button.callback("🛠 Admin Panel", "ADMIN_PANEL")]);
+  }
+
+  return Markup.inlineKeyboard(keyboard);
 }

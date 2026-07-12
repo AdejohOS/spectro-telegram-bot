@@ -1,0 +1,1 @@
+ALTER TABLE "wallet_transactions" DROP CONSTRAINT "wallet_transactions_reference_unique";

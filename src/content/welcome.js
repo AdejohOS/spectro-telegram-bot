@@ -1,7 +1,14 @@
-export function welcomeMessage(firstName) {
-  return `👋 Welcome, ${firstName}!
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
 
-Welcome to *Spectro Escrow*.
+export function welcomeMessage(firstName) {
+  return `👋 Welcome, ${escapeHtml(firstName)}!
+
+Welcome to <b>Spectro Escrow</b>.
 
 Your trusted platform for secure digital transactions.
 

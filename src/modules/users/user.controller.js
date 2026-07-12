@@ -6,7 +6,7 @@ export async function start(ctx) {
   const user = await UserService.registerTelegramUser(ctx.from);
 
   await ctx.reply(welcomeMessage(ctx.from.first_name), {
-    parse_mode: "Markdown",
-    ...mainKeyboard(),
+    parse_mode: "HTML",
+    ...mainKeyboard(ctx.from.id),
   });
 }

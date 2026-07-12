@@ -1,16 +1,18 @@
-import { getUserByTelegramId } from "./user.service.js";
+import { getUserByTelegramId } from "../../services/user.service.js";
+import { WalletService } from "../wallet/wallet.service.js";
 
 export async function getProfile(telegramId) {
   const user = await getUserByTelegramId(telegramId);
 
   if (!user) return null;
 
+  const wallet = await WalletService.getWallet(user.id);
+
   return {
     user,
-
     wallet: {
-      balance: 0,
-      pending: 0,
+      balance: wallet?.availableBalance ?? 0,
+      locked: wallet?.lockedBalance ?? 0,
     },
 
     stats: {

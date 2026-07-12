@@ -7,7 +7,7 @@ export function registerNavigationAction(bot) {
 
     await ctx.editMessageText(welcomeMessage(ctx.from.first_name), {
       parse_mode: "Markdown",
-      reply_markup: mainKeyboard().reply_markup,
+      reply_markup: mainKeyboard(ctx.from.id).reply_markup,
     });
   });
 }

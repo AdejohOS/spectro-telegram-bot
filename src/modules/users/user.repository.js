@@ -14,9 +14,48 @@ export class UserRepository {
     return result[0] ?? null;
   }
 
+  static async findById(id) {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+
+    return user ?? null;
+  }
+
+  static async findByUsername(username) {
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.username, username));
+
+    return user ?? null;
+  }
+
+  static async findByAddress(address) {
+    const [result] = await db
+      .select()
+      .from(addressPool)
+      .where(eq(addressPool.address, address));
+
+    return result ?? null;
+  }
+
   static async create(data) {
     const result = await db.insert(users).values(data).returning();
 
     return result[0];
+  }
+  static async updateRole(userId, role) {
+    const [user] = await db
+      .update(users)
+      .set({
+        role,
+      })
+      .where(eq(users.id, userId))
+      .returning();
+
+    return user;
+  }
+
+  static async findAdmins() {
+    return db.select().from(users).where(eq(users.role, "admin"));
   }
 }

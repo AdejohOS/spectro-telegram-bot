@@ -1,0 +1,4 @@
+ALTER TABLE "wallet_transactions" ADD COLUMN "escrow_id" uuid;--> statement-breakpoint
+ALTER TABLE "wallet_transactions" ADD COLUMN "counterparty_id" uuid;--> statement-breakpoint
+ALTER TABLE "wallet_transactions" ADD CONSTRAINT "wallet_transactions_escrow_id_escrows_id_fk" FOREIGN KEY ("escrow_id") REFERENCES "public"."escrows"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "wallet_transactions" ADD CONSTRAINT "wallet_transactions_counterparty_id_users_id_fk" FOREIGN KEY ("counterparty_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;

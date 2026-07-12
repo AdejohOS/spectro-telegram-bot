@@ -1,23 +1,23 @@
 export const RULES_MESSAGE = `
-📖 *Spectro Escrow Community Rules*
+📖 <b>Spectro Escrow Community Rules</b>
 
-*1. Escrow is Mandatory*
-• Every transaction must go through Spectro Escrow.
-• Direct transactions are strictly prohibited.
+<b>1. Escrow is Mandatory</b>
+&#8226; Every transaction must go through Spectro Escrow.
+&#8226; Direct transactions are strictly prohibited.
 
-*2. Respect Buyer Choice*
-• Sellers must honour a buyer's request to use escrow.
+<b>2. Respect Buyer Choice</b>
+&#8226; Sellers must honour a buyer's request to use escrow.
 
-*3. Verification*
-• Sellers may be required to verify ownership of the item being sold.
+<b>3. Verification</b>
+&#8226; Sellers may be required to verify ownership of the item being sold.
 
-*4. Listing Requirements*
-• Include a clear title.
-• Provide an accurate description.
-• State the selling price.
-• Add relevant screenshots where applicable.
+<b>4. Listing Requirements</b>
+&#8226; Include a clear title.
+&#8226; Provide an accurate description.
+&#8226; State the selling price.
+&#8226; Add relevant screenshots where applicable.
 
-*5. Prohibited Content*
+<b>5. Prohibited Content</b>
 ❌ Fraud
 ❌ Spam
 ❌ Politics
@@ -25,19 +25,19 @@ export const RULES_MESSAGE = `
 ❌ Adult (18+) content
 ❌ Illegal goods or services
 
-*6. Penalties*
+<b>6. Penalties</b>
 Violations may result in warnings, fines, temporary suspension, or permanent bans.
 
-*7. Discounts*
+<b>7. Discounts</b>
 Large purchases may qualify for discounted escrow fees.
 
-*8. Complaints*
+<b>8. Complaints</b>
 Use the escrow dispute system if you encounter any issue.
 
-*9. Withdrawals*
+<b>9. Withdrawals</b>
 Withdrawals are processed every 24 hours.
 
-*10. Stay Safe*
+<b>10. Stay Safe</b>
 Never complete payments outside Spectro Escrow.
 Report suspicious users immediately.
 `;
