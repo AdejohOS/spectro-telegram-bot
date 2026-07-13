@@ -13,7 +13,7 @@ export function registerProfileHandler(bot) {
     }
 
     await ctx.editMessageText(profileMessage(profile), {
-      parse_mode: "Markdown",
+      parse_mode: "HTML",
       reply_markup: backKeyboard().reply_markup,
     });
   });

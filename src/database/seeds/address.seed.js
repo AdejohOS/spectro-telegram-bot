@@ -1,7 +1,15 @@
 import { db } from "../db.js";
 import { addressPool } from "../schema/index.js";
+import { count } from "drizzle-orm";
 
 export async function seedAddresses() {
+  const [{ total }] = await db.select({ total: count() }).from(addressPool);
+
+  if (Number(total) > 0) {
+    console.log("ℹ️ Address pool already seeded.");
+    return;
+  }
+
   await db.insert(addressPool).values([
     // Bitcoin
     {

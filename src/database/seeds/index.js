@@ -1,5 +1,16 @@
 import { seedAddresses } from "./address.seed.js";
 
-await seedAddresses();
+async function seed() {
+  console.log("🌱 Seeding database...");
 
-process.exit(0);
+  await seedAddresses();
+
+  console.log("✅ Seeding complete.");
+
+  process.exit(0);
+}
+
+seed().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

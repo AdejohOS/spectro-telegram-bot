@@ -18,6 +18,8 @@ import { registerShopActions } from "../modules/shop/shop.action.js";
 
 import { registerOrderActions } from "../modules/order/order.action.js";
 
+import { registerSupportActions } from "../modules/support/support.action.js";
+
 export function registerRoutes(bot) {
   bot.use(loggerMiddleware);
 
@@ -44,6 +46,8 @@ export function registerRoutes(bot) {
   registerShopActions(bot);
 
   registerOrderActions(bot);
+
+  registerSupportActions(bot);
 
   // Commands
   // Actions
