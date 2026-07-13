@@ -4,10 +4,7 @@ export function adminKeyboard() {
   return Markup.inlineKeyboard([
     [Markup.button.callback("💳 Credit Wallet", "ADMIN_CREDIT")],
     [Markup.button.callback("⏳ Disputes", "ADMIN_DISPUTES")],
-    [
-      Markup.button.callback("💸 Withdrawals", "ADMIN_WITHDRAWALS"),
-      Markup.button.callback("👥 Users", "ADMIN_USERS"),
-    ],
+    [Markup.button.callback("💸 Withdrawals", "ADMIN_WITHDRAWALS")],
 
     [Markup.button.callback("📦 Shop", "ADMIN_PRODUCTS")],
 
@@ -44,4 +41,9 @@ export function confirmCreditKeyboard() {
 }
 export function skipKeyboard(callback) {
   return Markup.inlineKeyboard([[Markup.button.callback("⏭ Skip", callback)]]);
+}
+export function adminStatisticsKeyboard() {
+  return Markup.inlineKeyboard([
+    [Markup.button.callback("⬅ Admin Panel", "ADMIN_PANEL")],
+  ]);
 }

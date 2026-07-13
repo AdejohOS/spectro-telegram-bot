@@ -83,3 +83,70 @@ ${withdrawal.status.toUpperCase()}
 
 ━━━━━━━━━━━━━━`;
 }
+
+export function statisticsContent(stats) {
+  return `📊 <b>Platform Statistics</b>
+
+━━━━━━━━━━━━━━━━━━
+
+👥 <b>Users</b>
+
+Total Users
+${stats.totalUsers}
+
+━━━━━━━━━━━━━━━━━━
+
+₿ <b>Bitcoin Addresses</b>
+
+Total
+${stats.btcTotal}
+
+Assigned
+${stats.btcAssigned}
+
+Available
+${stats.btcAvailable}
+
+━━━━━━━━━━━━━━━━━━
+
+💵 <b>TRC20 Addresses</b>
+
+Total
+${stats.trcTotal}
+
+Assigned
+${stats.trcAssigned}
+
+Available
+${stats.trcAvailable}
+
+━━━━━━━━━━━━━━━━━━
+
+👛 <b>Wallets</b>
+
+Available Balance
+
+${formatMoney(stats.totalWallet)} USDT
+
+Locked Balance
+
+${formatMoney(stats.totalLocked)} USDT
+
+━━━━━━━━━━━━━━━━━━
+
+🤝 Escrows
+
+${stats.totalEscrows}
+
+🛒 Orders
+
+${stats.totalOrders}
+
+💸 Withdrawals
+
+${stats.totalWithdrawals}
+
+📦 Products
+
+${stats.totalProducts}`;
+}

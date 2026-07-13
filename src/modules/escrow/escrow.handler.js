@@ -156,7 +156,7 @@ ${details.disputeReason}`,
                 [
                   Markup.button.callback(
                     "⚖️ Review Dispute",
-                    `ADMIN_REVIEW_DISPUTE:${details.id}`,
+                    `VIEW_ESCROW:${details.id}`,
                   ),
                 ],
               ]).reply_markup,

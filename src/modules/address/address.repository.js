@@ -56,4 +56,13 @@ export class AddressRepository {
 
     return address;
   }
+  static async findByWalletAddress(address) {
+    const [record] = await db
+      .select()
+      .from(addressPool)
+      .where(eq(addressPool.address, address))
+      .limit(1);
+
+    return record ?? null;
+  }
 }

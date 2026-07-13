@@ -62,7 +62,7 @@ $${formatMoney(escrow.amount)}
 export function escrowDetailsContent(escrow) {
   return `
 <b>🤝 Escrow Details</b>
-
+ 
 ━━━━━━━━━━━━━━━━━━
 
 <b>Escrow</b>

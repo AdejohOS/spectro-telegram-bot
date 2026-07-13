@@ -1,6 +1,7 @@
 import { UserRepository } from "../users/user.repository.js";
 import { AddressRepository } from "../address/address.repository.js";
 import { WalletService } from "../wallet/wallet.service.js";
+import { AdminRepository } from "./admin.repository.js";
 
 export class AdminService {
   static async findUser(searchType, value) {
@@ -9,7 +10,7 @@ export class AdminService {
     }
 
     if (searchType === "address") {
-      const address = await AddressRepository.findByAddress(value);
+      const address = await AddressRepository.findByWalletAddress(value);
 
       if (!address) {
         return null;
@@ -52,5 +53,8 @@ export class AdminService {
       txHash: state.txHash,
       notes: state.notes,
     });
+  }
+  static async getStatistics() {
+    return AdminRepository.getStatistics();
   }
 }

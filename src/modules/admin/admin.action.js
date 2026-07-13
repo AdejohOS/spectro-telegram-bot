@@ -35,6 +35,9 @@ import { productListContent } from "../shop/product.content.js";
 import { productListKeyboard } from "../shop/product.keyboard.js";
 import { productDetailsKeyboard } from "../shop/product.keyboard.js";
 
+import { adminStatisticsKeyboard } from "./admin.keyboard.js";
+import { statisticsContent } from "./admin.content.js";
+
 export function registerAdminActions(bot) {
   bot.action("ADMIN_PANEL", async (ctx) => {
     await ctx.answerCbQuery();
@@ -49,6 +52,16 @@ export function registerAdminActions(bot) {
       parse_mode: "Markdown",
 
       reply_markup: adminKeyboard().reply_markup,
+    });
+  });
+  bot.action("ADMIN_STATS", async (ctx) => {
+    await ctx.answerCbQuery();
+
+    const stats = await AdminService.getStatistics();
+
+    await ctx.editMessageText(statisticsContent(stats), {
+      parse_mode: "HTML",
+      reply_markup: adminStatisticsKeyboard().reply_markup,
     });
   });
 

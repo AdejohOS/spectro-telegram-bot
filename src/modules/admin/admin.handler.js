@@ -67,10 +67,13 @@ Enter the amount to credit.`,
 
       setAdminState(ctx.from.id, {
         step: "ENTER_AMOUNT",
-        id: user.id,
-        firstName: user.firstName,
-        username: user.username,
-        telegramId: user.telegramId,
+
+        user: {
+          id: user.id,
+          firstName: user.firstName,
+          username: user.username,
+          telegramId: user.telegramId,
+        },
       });
 
       return ctx.reply(
