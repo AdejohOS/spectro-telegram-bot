@@ -1,11 +1,15 @@
-import { getAdminState } from "./admin.state.js";
 import { isAdmin } from "../../config/admin.js";
 import { AdminService } from "./admin.service.js";
-import { setAdminState } from "./admin.state.js";
+import {
+  setAdminState,
+  clearAdminState,
+  getAdminState,
+} from "./admin.state.js";
 
 import { networkKeyboard } from "./admin.keyboard.js";
 import { skipKeyboard } from "./admin.keyboard.js";
 import { toMinorUnits } from "../../utils/money.js";
+import { AddressRepository } from "../address/address.repository.js";
 
 export function registerAdminHandler(bot) {
   bot.on("text", async (ctx, next) => {
@@ -129,6 +133,82 @@ Enter the amount to credit.`,
       });
 
       return sendConfirmation(ctx);
+    }
+
+    if (state.step === "IMPORT_ADDRESSES") {
+      const addresses = ctx.message.text
+        .split(/\r?\n/)
+        .map((a) => a.trim().replace(/,+$/, ""))
+        .filter(Boolean);
+
+      const uniqueAddresses = [...new Set(addresses)];
+
+      const existing =
+        await AddressRepository.findManyByAddress(uniqueAddresses);
+
+      const existingSet = new Set(existing.map((a) => a.address));
+
+      const values = [];
+
+      let duplicates = 0;
+
+      let invalid = 0;
+
+      for (const address of addresses) {
+        if (existingSet.has(address)) {
+          duplicates++;
+          continue;
+        }
+        if (
+          state.network === "BTC" &&
+          !/^(bc1|1|3)[a-zA-Z0-9]{20,}$/.test(address)
+        ) {
+          invalid++;
+          continue;
+        }
+        if (state.network === "TRC20" && !/^T[a-zA-Z0-9]{33}$/.test(address)) {
+          invalid++;
+          continue;
+        }
+
+        values.push({
+          network: state.network,
+          address,
+          status: "active",
+        });
+
+        clearAdminState(ctx.from.id);
+      }
+
+      if (values.length) {
+        await AddressRepository.createMany(values);
+      }
+
+      return ctx.reply(
+        `✅ Import Complete
+
+━━━━━━━━━━━━━━
+
+Network
+
+${state.network}
+
+Imported
+
+${values.length}
+
+Duplicates
+
+${duplicates}
+
+Invalid
+
+${invalid}
+
+Submitted
+
+${addresses.length}`,
+      );
     }
 
     return next();

@@ -366,7 +366,6 @@ Thank you for using Spectro.`,
           parse_mode: "HTML",
 
           reply_markup: Markup.inlineKeyboard([
-            [Markup.button.callback("👛 Wallet", "WALLET")],
             [
               Markup.button.callback(
                 "📜 Completed Escrows",

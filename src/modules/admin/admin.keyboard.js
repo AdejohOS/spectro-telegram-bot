@@ -2,11 +2,14 @@ import { Markup } from "telegraf";
 
 export function adminKeyboard() {
   return Markup.inlineKeyboard([
-    [Markup.button.callback("💳 Credit Wallet", "ADMIN_CREDIT")],
+    [
+      Markup.button.callback("💳 Credit Wallet", "ADMIN_CREDIT"),
+      Markup.button.callback("💸 Withdrawals", "ADMIN_WITHDRAWALS"),
+    ],
     [Markup.button.callback("⏳ Disputes", "ADMIN_DISPUTES")],
-    [Markup.button.callback("💸 Withdrawals", "ADMIN_WITHDRAWALS")],
 
     [Markup.button.callback("📦 Shop", "ADMIN_PRODUCTS")],
+    [Markup.button.callback("🏦 Address Pool", "ADDRESS_POOL")],
 
     [Markup.button.callback("📊 Statistics", "ADMIN_STATS")],
 

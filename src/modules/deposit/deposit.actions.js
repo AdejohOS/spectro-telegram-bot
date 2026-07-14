@@ -4,6 +4,14 @@ import { depositAddressKeyboard, depositKeyboard } from "./deposit.keyboard.js";
 
 import { depositMessage } from "./deposit.content.js";
 import { UserRepository } from "../users/user.repository.js";
+import { AddressRepository } from "../address/address.repository.js";
+import {
+  setDepositState,
+  getDepositState,
+  clearDepositState,
+} from "./deposit.state.js";
+
+import { Markup } from "telegraf";
 
 export function registerDepositAction(bot) {
   bot.action("DEPOSIT", async (ctx) => {
@@ -25,7 +33,8 @@ export function registerDepositAction(bot) {
         depositMessage("Bitcoin (BTC)", address.address),
         {
           parse_mode: "Markdown",
-          reply_markup: depositAddressKeyboard().reply_markup,
+          reply_markup: depositAddressKeyboard("BTC", address.address)
+            .reply_markup,
         },
       );
     } catch (error) {
@@ -53,7 +62,8 @@ export function registerDepositAction(bot) {
         depositMessage("USDT (TRC20)", address.address),
         {
           parse_mode: "Markdown",
-          reply_markup: depositAddressKeyboard().reply_markup,
+          reply_markup: depositAddressKeyboard("TRC20", address.address)
+            .reply_markup,
         },
       );
     } catch (error) {
@@ -68,5 +78,59 @@ export function registerDepositAction(bot) {
 
       throw error;
     }
+  });
+
+  bot.action(/^I_HAVE_DEPOSITED\|(.+)\|(.+)$/, async (ctx) => {
+    await ctx.answerCbQuery();
+
+    const network = ctx.match[1];
+    const address = ctx.match[2];
+
+    const user = await UserRepository.findByTelegramId(ctx.from.id);
+
+    const admins = await UserRepository.findAdmins();
+
+    for (const admin of admins) {
+      await ctx.telegram.sendMessage(
+        admin.telegramId,
+        `💳 <b>Deposit Notification</b>
+
+A user has reported making a deposit.
+
+━━━━━━━━━━━━━━
+
+👤 <b>User</b>
+
+${user.firstName}
+
+${user.username ? `@${user.username}` : "No Username"}
+
+🌐 <b>Network</b>
+
+${network}
+
+🏦 <b>Deposit Address</b>
+
+<code>${address}</code>
+
+🟡 <b>Status</b>
+
+Awaiting Blockchain Verification`,
+        {
+          parse_mode: "HTML",
+        },
+      );
+    }
+
+    await ctx.editMessageText(
+      `✅ <b>Notification Sent</b>
+
+Your administrators have been notified.
+
+Your wallet will be credited after your transaction has been verified.`,
+      {
+        parse_mode: "HTML",
+      },
+    );
   });
 }

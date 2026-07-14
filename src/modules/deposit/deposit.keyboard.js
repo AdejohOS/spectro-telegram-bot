@@ -8,9 +8,14 @@ export function depositKeyboard() {
   ]);
 }
 
-export function depositAddressKeyboard() {
+export function depositAddressKeyboard(network, address) {
   return Markup.inlineKeyboard([
-    [Markup.button.callback("✅ I Have Deposited", "I_HAVE_DEPOSITED")],
+    [
+      Markup.button.callback(
+        "✅ I Have Deposited",
+        `I_HAVE_DEPOSITED|${network}|${address}`,
+      ),
+    ],
     [Markup.button.callback("⬅️ Back", "DEPOSIT")],
   ]);
 }

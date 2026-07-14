@@ -20,6 +20,10 @@ import { registerOrderActions } from "../modules/order/order.action.js";
 
 import { registerSupportActions } from "../modules/support/support.action.js";
 
+import { registerFAQActions } from "../modules/faq/faq.action.js";
+
+import { registerAddressActions } from "../modules/address/address.action.js";
+
 export function registerRoutes(bot) {
   bot.use(loggerMiddleware);
 
@@ -48,6 +52,10 @@ export function registerRoutes(bot) {
   registerOrderActions(bot);
 
   registerSupportActions(bot);
+
+  registerFAQActions(bot);
+
+  registerAddressActions(bot);
 
   // Commands
   // Actions

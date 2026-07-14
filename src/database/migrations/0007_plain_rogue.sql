@@ -1,1 +1,0 @@
-ALTER TABLE "escrows" ALTER COLUMN "status" SET DEFAULT 'pending_seller';

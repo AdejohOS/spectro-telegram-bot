@@ -1,1 +1,0 @@
-ALTER TABLE "orders" ADD COLUMN "product_title" varchar(255) NOT NULL;

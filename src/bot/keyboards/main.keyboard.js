@@ -9,13 +9,10 @@ export function mainKeyboard(telegramId) {
       Markup.button.callback("➖ Withdrawal", "WITHDRAWAL_MENU"),
     ],
     [Markup.button.callback("🛒 Shop", "SHOP")],
-    [
-      Markup.button.callback("👤 Profile", "PROFILE"),
-      Markup.button.callback("⚙️ Settings", "SETTINGS"),
-    ],
+    [Markup.button.callback("👤 Profile", "PROFILE")],
     [
       Markup.button.callback("📖 Rules", "RULES"),
-      Markup.button.callback("❓ Help", "HELP"),
+      Markup.button.callback("❓ Help/FAQ", "FAQ"),
     ],
     [Markup.button.callback("📞 Support", "SUPPORT")],
   ];
