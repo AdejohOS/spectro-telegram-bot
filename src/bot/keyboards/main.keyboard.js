@@ -14,6 +14,7 @@ export function mainKeyboard(telegramId) {
       Markup.button.callback("📖 Rules", "RULES"),
       Markup.button.callback("❓ Help/FAQ", "FAQ"),
     ],
+    [Markup.button.url("🌍 Join Community", "https://t.me/Spectromileschat")],
     [Markup.button.callback("📞 Support", "SUPPORT")],
   ];
 
