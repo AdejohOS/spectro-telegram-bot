@@ -1,7 +1,7 @@
 import { formatMoney } from "../../utils/money.js";
 
 export function profileMessage(profile) {
-  const { user, wallet, stats, reputation } = profile;
+  const { user, wallet, stats } = profile;
 
   return `👤 <b>My Profile</b>
 
@@ -44,24 +44,14 @@ ${formatMoney(Number(wallet.locked))} USDT
 🤝 Completed Escrows
 ${stats.completed}
 
-📦 Active Orders
+🔒 Active Escrows
 ${stats.active}
 
-❌ Cancelled
-${stats.cancelled}
+❌ Rejected Escrows
+${stats.rejected}
 
 ⚖️ Disputes
 ${stats.disputes}
-
-━━━━━━━━━━━━━━━━━━
-
-⭐ <b>Reputation</b>
-
-⭐ Rating
-${reputation.rating}/5.0
-
-📝 Reviews
-${reputation.reviews}
 
 ━━━━━━━━━━━━━━━━━━
 

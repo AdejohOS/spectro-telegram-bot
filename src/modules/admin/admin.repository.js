@@ -8,7 +8,7 @@ import {
   orders,
   products,
 } from "../../database/schema/index.js";
-import { count, eq, isNull, sum } from "drizzle-orm";
+import { and, count, eq, isNotNull, isNull, sum } from "drizzle-orm";
 export class AdminRepository {
   static async findPending(page = 1, limit = 10) {
     return db
@@ -32,8 +32,21 @@ export class AdminRepository {
       .select({ btcAvailable: count() })
       .from(addressPool)
       .where(
-        eq(addressPool.network, "BTC"),
-        isNull(addressPool.assignedUserId),
+        and(
+          eq(addressPool.network, "BTC"),
+          eq(addressPool.status, "active"),
+          isNull(addressPool.assignedUserId),
+        ),
+      );
+
+    const [{ btcAssigned }] = await db
+      .select({ btcAssigned: count() })
+      .from(addressPool)
+      .where(
+        and(
+          eq(addressPool.network, "BTC"),
+          isNotNull(addressPool.assignedUserId),
+        ),
       );
 
     const [{ trcTotal }] = await db
@@ -45,8 +58,21 @@ export class AdminRepository {
       .select({ trcAvailable: count() })
       .from(addressPool)
       .where(
-        eq(addressPool.network, "TRC20"),
-        isNull(addressPool.assignedUserId),
+        and(
+          eq(addressPool.network, "TRC20"),
+          eq(addressPool.status, "active"),
+          isNull(addressPool.assignedUserId),
+        ),
+      );
+
+    const [{ trcAssigned }] = await db
+      .select({ trcAssigned: count() })
+      .from(addressPool)
+      .where(
+        and(
+          eq(addressPool.network, "TRC20"),
+          isNotNull(addressPool.assignedUserId),
+        ),
       );
 
     const [{ totalWallet }] = await db
@@ -82,11 +108,11 @@ export class AdminRepository {
 
       btcTotal,
       btcAvailable,
-      btcAssigned: btcTotal - btcAvailable,
+      btcAssigned,
 
       trcTotal,
       trcAvailable,
-      trcAssigned: trcTotal - trcAvailable,
+      trcAssigned,
 
       totalWallet: Number(totalWallet ?? 0),
 

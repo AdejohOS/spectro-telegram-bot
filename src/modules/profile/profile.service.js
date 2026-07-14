@@ -1,5 +1,6 @@
 import { getUserByTelegramId } from "../../services/user.service.js";
 import { WalletService } from "../wallet/wallet.service.js";
+import { EscrowService } from "../escrow/escrow.service.js";
 
 export async function getProfile(telegramId) {
   const user = await getUserByTelegramId(telegramId);
@@ -7,6 +8,7 @@ export async function getProfile(telegramId) {
   if (!user) return null;
 
   const wallet = await WalletService.getWallet(user.id);
+  const escrowSummary = await EscrowService.getHistorySummary(telegramId);
 
   return {
     user,
@@ -16,16 +18,10 @@ export async function getProfile(telegramId) {
     },
 
     stats: {
-      completed: 0,
-      active: 0,
-      cancelled: 0,
-      disputes: 0,
-      volume: 0,
-    },
-
-    reputation: {
-      rating: 5.0,
-      reviews: 0,
+      completed: escrowSummary.completed,
+      active: escrowSummary.active,
+      rejected: escrowSummary.rejected,
+      disputes: escrowSummary.disputed,
     },
   };
 }
