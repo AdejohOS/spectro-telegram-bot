@@ -17,8 +17,20 @@ export class UserService {
         languageCode: telegramUser.language_code,
         role,
       });
-    } else if (user.role !== role) {
-      user = await UserRepository.updateRole(user.id, role);
+    } else if (
+      user.username !== telegramUser.username ||
+      user.firstName !== telegramUser.first_name ||
+      user.lastName !== telegramUser.last_name ||
+      user.languageCode !== telegramUser.language_code ||
+      user.role !== role
+    ) {
+      user = await UserRepository.updateProfile(user.id, {
+        username: telegramUser.username,
+        firstName: telegramUser.first_name,
+        lastName: telegramUser.last_name,
+        languageCode: telegramUser.language_code,
+        role,
+      });
     }
 
     await WalletService.getOrCreateWallet(user.id);

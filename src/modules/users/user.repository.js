@@ -4,6 +4,21 @@ import { db } from "../../database/db.js";
 import { users } from "../../database/schema/index.js";
 
 export class UserRepository {
+  static async updateProfile(userId, data) {
+    const [user] = await db
+      .update(users)
+      .set({
+        username: data.username,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        languageCode: data.languageCode,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId))
+      .returning();
+
+    return user;
+  }
   static async findByTelegramId(telegramId) {
     const result = await db
       .select()
