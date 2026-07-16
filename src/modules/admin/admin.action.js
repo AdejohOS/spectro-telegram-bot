@@ -190,38 +190,38 @@ export function registerAdminActions(bot) {
       clearAdminState(ctx.from.id);
 
       await ctx.editMessageText(
-        `✅ *Wallet Credited Successfully*
+        `✅ <b>Wallet Credited Successfully</b>
 
-👤 User: ${
+👤 <b>User:</b> ${
           state.user.username ? `@${state.user.username}` : state.user.firstName
         }
 
-💰 Amount: *$${formatMoney(state.amount)}*
+💰 <b>Amount:</b> <b>$${formatMoney(state.amount)}</b>
 
-💳 New Balance: *$${formatMoney(wallet.availableBalance)}*
+💳 <b>New Balance:</b> <b>$${formatMoney(wallet.availableBalance)}</b>
 
 📩 The user has been notified.`,
         {
-          parse_mode: "Markdown",
+          parse_mode: "HTML",
         },
       );
 
       try {
         await ctx.telegram.sendMessage(
           state.user.telegramId,
-          `🎉 *Wallet Credited*
+          `🎉 <b>Wallet Credited</b>
 
 Your wallet has been credited successfully.
 
-💰 Amount: *$${formatMoney(state.amount)}*
+💰 <b>Amount:</b> <b>$${formatMoney(state.amount)}</b>
 
-💳 New Balance: *$${formatMoney(wallet.availableBalance)}*
+💳 <b>New Balance:</b> <b>$${formatMoney(wallet.availableBalance)}</b>
 
-📝 ${state.notes ? `Note: ${state.notes}` : "No additional notes."}
+📝 <b>Note:</b> ${state.notes ?? "No additional notes."}
 
 Thank you for using Spectro.`,
           {
-            parse_mode: "Markdown",
+            parse_mode: "HTML",
           },
         );
       } catch (err) {
