@@ -61,19 +61,21 @@ export function escrowStatusLabel(status) {
     case ESCROW_STATUS.REFUNDED:
       return "↩ Refunded";
 
+    case ESCROW_STATUS.CANCELLED:
+      return "Cancelled";
+
     default:
       return status;
   }
 }
 
 export const ESCROW_STATUS = {
-  PENDING_SELLER: "pending_seller",
-  WAITING_FUNDING: "waiting_funding",
-  FUNDED: "funded",
+  PENDING_SELLER: "awaiting_seller",
+
   DELIVERED: "delivered",
+  ACCEPTED: "accepted",
   COMPLETED: "completed",
   REJECTED: "rejected",
-  REFUNDED: "refunded",
   DISPUTED: "disputed",
   CANCELLED: "cancelled",
 };

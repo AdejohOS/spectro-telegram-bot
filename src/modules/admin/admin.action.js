@@ -80,11 +80,14 @@ export function registerAdminActions(bot) {
       startedAt: Date.now(),
     });
 
-    await ctx.reply("Enter the user's username (without @).", {
-      reply_markup: {
-        force_reply: true,
+    await ctx.reply(
+      "Enter the user's username, including @. Example: @username001",
+      {
+        reply_markup: {
+          force_reply: true,
+        },
       },
-    });
+    );
   });
 
   bot.action("SEARCH_ADDRESS", async (ctx) => {
@@ -230,6 +233,14 @@ Thank you for using Spectro.`,
       console.error("ERROR:", error);
       await ctx.reply(error.message);
     }
+  });
+
+  bot.action("CANCEL_CREDIT", async (ctx) => {
+    await ctx.answerCbQuery();
+
+    clearAdminState(ctx.from.id);
+
+    await ctx.editMessageText("Wallet credit cancelled.");
   });
 
   bot.action(

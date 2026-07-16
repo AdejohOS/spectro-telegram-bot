@@ -9,66 +9,35 @@ import { WalletService } from "../wallet/wallet.service.js";
 
 export class EscrowService {
   static async create({ buyerId, sellerId, amount, title, description }) {
-    return EscrowRepository.create({
-      escrowNumber: generateEscrowNumber(),
-
-      buyerId,
-
-      sellerId,
-
-      amount,
-
-      title,
-
-      description,
-
-      createdBy: buyerId,
-
-      status: ESCROW_STATUS.PENDING_SELLER,
-    });
-  }
-
-  static async acceptEscrow(escrowId, sellerId) {
     return db.transaction(async (tx) => {
-      const escrow = await EscrowRepository.findById(escrowId);
+      const escrowNumber = generateEscrowNumber();
 
-      if (!escrow) {
-        throw new Error("Escrow not found.");
-      }
-
-      if (escrow.sellerId !== sellerId) {
-        throw new Error("Unauthorized.");
-      }
-
-      if (escrow.status !== "pending_seller") {
-        throw new Error("Escrow is no longer pending.");
-      }
-
-      const updated = await EscrowRepository.updateStatus(
-        tx,
-        escrow.id,
-        "waiting_funding",
-      );
-
-      await EscrowEventRepository.create(tx, {
-        escrowId,
-
-        userId: sellerId,
-
-        event: "Seller Accepted",
+      await WalletService.lockFunds(tx, {
+        userId: buyerId,
+        amount,
+        reference: escrowNumber,
+        notes: "Escrow Funding",
       });
 
-      return updated;
+      const escrow = await EscrowRepository.createTx(tx, {
+        escrowNumber,
+        buyerId,
+        sellerId,
+        amount,
+        title,
+        description,
+        createdBy: buyerId,
+        status: ESCROW_STATUS.PENDING_SELLER,
+      });
+
+      await EscrowEventRepository.create(tx, {
+        escrowId: escrow.id,
+        userId: buyerId,
+        event: ESCROW_EVENTS.CREATED,
+      });
+
+      return escrow;
     });
-  }
-
-  static async getPending(telegramId) {
-    const user = await UserRepository.findByTelegramId(telegramId);
-
-    return EscrowRepository.findPending(user.id);
-  }
-  static async getEscrow(id) {
-    return EscrowRepository.findDetails(id);
   }
 
   static async acceptEscrow(escrowId, sellerId) {
@@ -88,20 +57,28 @@ export class EscrowService {
       }
 
       const updated = await EscrowRepository.update(tx, escrow.id, {
-        status: ESCROW_STATUS.WAITING_FUNDING,
+        status: ESCROW_STATUS.ACCEPTED,
       });
 
       await EscrowEventRepository.create(tx, {
         escrowId: escrow.id,
-
         userId: sellerId,
-
         event: ESCROW_EVENTS.ACCEPTED,
       });
 
       return updated;
     });
   }
+
+  static async getPending(telegramId) {
+    const user = await UserRepository.findByTelegramId(telegramId);
+
+    return EscrowRepository.findPending(user.id);
+  }
+  static async getEscrow(id) {
+    return EscrowRepository.findDetails(id);
+  }
+
   static async reject(escrowId, sellerId) {
     return db.transaction(async (tx) => {
       const escrow = await EscrowRepository.findByIdTx(tx, escrowId);
@@ -117,6 +94,13 @@ export class EscrowService {
       if (escrow.status !== ESCROW_STATUS.PENDING_SELLER) {
         throw new Error("Escrow is no longer pending.");
       }
+
+      await WalletService.refundLockedFunds(tx, {
+        buyerId: escrow.buyerId,
+        amount: escrow.amount,
+        reference: escrow.escrowNumber,
+        notes: "Seller rejected escrow",
+      });
 
       const updated = await EscrowRepository.update(tx, escrow.id, {
         status: ESCROW_STATUS.REJECTED,
@@ -134,7 +118,7 @@ export class EscrowService {
     });
   }
 
-  static async fund(escrowId, buyerTelegramId) {
+  static async cancelPending(escrowId, buyerTelegramId) {
     const buyer = await UserRepository.findByTelegramId(buyerTelegramId);
 
     return db.transaction(async (tx) => {
@@ -148,30 +132,25 @@ export class EscrowService {
         throw new Error("Unauthorized.");
       }
 
-      if (escrow.status !== ESCROW_STATUS.WAITING_FUNDING) {
-        throw new Error("Escrow cannot be funded.");
+      if (escrow.status !== ESCROW_STATUS.PENDING_SELLER) {
+        throw new Error("Escrow can only be cancelled before seller accepts.");
       }
 
-      await WalletService.lockFunds(tx, {
-        userId: buyer.id,
-
+      await WalletService.refundLockedFunds(tx, {
+        buyerId: escrow.buyerId,
         amount: escrow.amount,
-
         reference: escrow.escrowNumber,
-
-        notes: "Escrow Funding",
+        notes: "Buyer cancelled escrow before seller accepted",
       });
 
       const updated = await EscrowRepository.update(tx, escrow.id, {
-        status: ESCROW_STATUS.FUNDED,
+        status: ESCROW_STATUS.CANCELLED,
       });
 
       await EscrowEventRepository.create(tx, {
         escrowId: escrow.id,
-
         userId: buyer.id,
-
-        event: ESCROW_EVENTS.FUNDED,
+        event: ESCROW_EVENTS.CANCELLED,
       });
 
       return updated;
@@ -261,16 +240,6 @@ export class EscrowService {
     });
   }
 
-  // without pagination, just to get all active escrows for a user
-  static async getAwaitingFunding(telegramId) {
-    const user = await UserRepository.findByTelegramId(telegramId);
-
-    return EscrowRepository.findByStatus(
-      user.id,
-      ESCROW_STATUS.WAITING_FUNDING,
-    );
-  }
-
   static async getCompleted(telegramId) {
     const user = await UserRepository.findByTelegramId(telegramId);
 
@@ -349,6 +318,8 @@ export class EscrowService {
 
       rejected: 0,
 
+      cancelled: 0,
+
       disputed: 0,
     };
 
@@ -378,6 +349,11 @@ export class EscrowService {
 
         case ESCROW_STATUS.REJECTED:
           summary.rejected = Number(row.total);
+
+          break;
+
+        case ESCROW_STATUS.CANCELLED:
+          summary.cancelled = Number(row.total);
 
           break;
 

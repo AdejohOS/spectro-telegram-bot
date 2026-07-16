@@ -151,9 +151,9 @@ export function escrowHistoryContent(summary) {
 
 <b>${summary.pending}</b>
 
-💰 Awaiting Funding
+💰 Cancelled
 
-<b>${summary.funding}</b>
+<b>${summary.cancelled}</b>
 
 🔒 Active
 

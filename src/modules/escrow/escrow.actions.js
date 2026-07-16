@@ -8,10 +8,7 @@ import { UserRepository } from "../users/user.repository.js";
 import { EscrowService } from "./escrow.service.js";
 import { formatMoney } from "../../utils/money.js";
 import { pendingEscrowsContent } from "./escrow.content.js";
-import {
-  pendingEscrowsKeyboard,
-  fundEscrowKeyboard,
-} from "./escrow.keyboard.js";
+import { pendingEscrowsKeyboard } from "./escrow.keyboard.js";
 import { escrowDetailsContent } from "./escrow.content.js";
 import { escrowDetailsKeyboard } from "./escrow.keyboard.js";
 import { viewEscrowKeyboard } from "./escrow.keyboard.js";
@@ -44,11 +41,14 @@ export function registerEscrowActions(bot) {
 
     console.log("SET ESCROW:", ctx.from.id, getEscrowState(ctx.from.id));
 
-    await ctx.reply("Enter the seller's username (without @).", {
-      reply_markup: {
-        force_reply: true,
+    await ctx.reply(
+      "Enter the seller's username, including @. Example: @username001",
+      {
+        reply_markup: {
+          force_reply: true,
+        },
       },
-    });
+    );
   });
 
   bot.action("CONFIRM_ESCROW", async (ctx) => {
@@ -84,7 +84,9 @@ Status:
 
 *${escrow.status.toUpperCase()}*
 
-The seller has been notified.`,
+💰 Your funds have been securely locked.
+
+Waiting for the seller to accept.`,
         {
           parse_mode: "Markdown",
         },
@@ -114,6 +116,8 @@ A buyer has created a new escrow.
 
 📦 ${details.title}
 
+The buyer's funds have already been secured.
+
 Please review the escrow before accepting.`,
 
         {
@@ -137,6 +141,41 @@ Please review the escrow before accepting.`,
     await ctx.editMessageText("❌ Escrow creation cancelled.");
   });
 
+  bot.action(/^CANCEL_PENDING_ESCROW:(.+)$/, async (ctx) => {
+    await ctx.answerCbQuery();
+
+    try {
+      const escrow = await EscrowService.cancelPending(
+        ctx.match[1],
+        ctx.from.id,
+      );
+      const details = await EscrowService.getEscrow(escrow.id);
+
+      await ctx.editMessageText(
+        `<b>Escrow Cancelled</b>
+
+Your locked funds have been refunded to your wallet.`,
+        {
+          parse_mode: "HTML",
+        },
+      );
+
+      await ctx.telegram.sendMessage(
+        details.sellerTelegramId,
+        `<b>Escrow Cancelled</b>
+
+The buyer cancelled this escrow before acceptance.`,
+        {
+          parse_mode: "HTML",
+          reply_markup: viewEscrowKeyboard(details.id).reply_markup,
+        },
+      );
+    } catch (error) {
+      console.error(error);
+      await ctx.reply(error.message);
+    }
+  });
+
   bot.action(/^ACCEPT_ESCROW:(.+)$/, async (ctx) => {
     await ctx.answerCbQuery();
 
@@ -150,13 +189,12 @@ Please review the escrow before accepting.`,
       await ctx.editMessageText(
         `✅ <b>Escrow Accepted</b>
 
-Waiting for the buyer to fund this escrow.`,
+Funds are locked. You may now deliver the item.`,
         {
           parse_mode: "HTML",
         },
       );
 
-      const buyer = await UserRepository.findById(escrow.buyerId);
       const details = await EscrowService.getEscrow(escrow.id);
 
       await ctx.telegram.sendMessage(
@@ -166,7 +204,7 @@ Waiting for the buyer to fund this escrow.`,
 
 The seller has accepted your escrow.
 
-You can now fund the escrow.`,
+Funds are locked and the escrow is now active.`,
 
         {
           parse_mode: "HTML",
@@ -199,7 +237,9 @@ You can now fund the escrow.`,
         details.buyerTelegramId,
         `<b>❌ Escrow Rejected</b>
 
-The seller declined this escrow request.`,
+The seller declined this escrow request.
+
+Your locked funds have been refunded to your wallet.`,
         {
           parse_mode: "HTML",
           reply_markup: viewEscrowKeyboard(details.id).reply_markup,
@@ -247,46 +287,6 @@ The seller declined this escrow request.`,
     });
   });
 
-  bot.action(/^FUND_ESCROW:(.+)$/, async (ctx) => {
-    await ctx.answerCbQuery();
-
-    try {
-      const escrow = await EscrowService.fund(ctx.match[1], ctx.from.id);
-
-      await ctx.editMessageText(
-        `✅ <b>Escrow Funded</b>
-
-Funds have been locked successfully.`,
-        {
-          parse_mode: "HTML",
-        },
-      );
-
-      // NEW: Load full escrow details
-      const details = await EscrowService.getEscrow(escrow.id);
-
-      await ctx.telegram.sendMessage(
-        details.sellerTelegramId,
-
-        `<b>💰 Escrow Funded</b>
-
-The buyer has successfully funded this escrow.
-
-Funds are securely locked.
-
-You may now deliver the item.`,
-
-        {
-          parse_mode: "HTML",
-
-          reply_markup: viewEscrowKeyboard(details.id).reply_markup,
-        },
-      );
-    } catch (error) {
-      console.error(error);
-      await ctx.reply(error.message);
-    }
-  });
   bot.action(
     /^DELIVER_ESCROW:(.+)$/,
 
@@ -385,13 +385,28 @@ Thank you for using Spectro.`,
   bot.action("ESCROW_WAITING_FUNDING", async (ctx) => {
     await ctx.answerCbQuery();
 
-    const escrows = await EscrowService.getAwaitingFunding(ctx.from.id);
+    const data = await EscrowService.listByStatus(
+      ctx.from.id,
+      ESCROW_STATUS.CANCELLED,
+      1,
+    );
 
     await ctx.editMessageText(
-      escrowListContent("💰 Awaiting Funding", escrows),
+      escrowListContent(
+        "Cancelled Escrows",
+        data.escrows,
+        data.page,
+        data.total,
+        data.limit,
+      ),
       {
         parse_mode: "HTML",
-        reply_markup: pendingEscrowsKeyboard(escrows).reply_markup,
+        reply_markup: escrowListKeyboard(
+          ESCROW_STATUS.CANCELLED,
+          data.page,
+          Math.ceil(data.total / data.limit),
+          data.escrows,
+        ).reply_markup,
       },
     );
   });

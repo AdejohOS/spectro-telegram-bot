@@ -24,10 +24,15 @@ export function registerAdminHandler(bot) {
     }
 
     if (state.step === "SEARCH_USERNAME") {
-      const user = await AdminService.findUser(
-        "username",
-        ctx.message.text.trim(),
-      );
+      const username = ctx.message.text.trim();
+
+      if (!username.startsWith("@") || username.length === 1) {
+        return ctx.reply(
+          "Please enter the user's full username, including @. Example: @username001",
+        );
+      }
+
+      const user = await AdminService.findUser("username", username.slice(1));
 
       if (!user) {
         return ctx.reply("❌ User not found.");

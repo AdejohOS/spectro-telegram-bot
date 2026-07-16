@@ -14,10 +14,7 @@ export function escrowKeyboard() {
     ],
 
     [
-      Markup.button.callback(
-        "⏳ Waiting Funding",
-        "ESCROW_LIST:waiting_funding:1",
-      ),
+      Markup.button.callback("⏳ Cancelled", "ESCROW_LIST:cancelled:1"),
       Markup.button.callback("✅ Completed", "ESCROW_LIST:completed:1"),
     ],
     [
@@ -106,13 +103,16 @@ export function escrowDetailsKeyboard(escrow, currentUserId) {
     ]);
   }
 
-  // Buyer funds escrow
+  // Buyer can cancel before seller accepts
   if (
-    escrow.status === ESCROW_STATUS.WAITING_FUNDING &&
+    escrow.status === ESCROW_STATUS.PENDING_SELLER &&
     escrow.buyerTelegramId === currentUserId
   ) {
     buttons.push([
-      Markup.button.callback("💰 Fund Escrow", `FUND_ESCROW:${escrow.id}`),
+      Markup.button.callback(
+        "❌ Cancel Escrow",
+        `CANCEL_PENDING_ESCROW:${escrow.id}`,
+      ),
     ]);
   }
 
@@ -151,13 +151,6 @@ export function escrowDetailsKeyboard(escrow, currentUserId) {
   return Markup.inlineKeyboard(buttons);
 }
 
-export function fundEscrowKeyboard(escrowId) {
-  return Markup.inlineKeyboard([
-    [Markup.button.callback("💰 Fund Escrow", `FUND_ESCROW:${escrowId}`)],
-    [Markup.button.callback("👁 View Escrow", `VIEW_ESCROW:${escrowId}`)],
-  ]);
-}
-
 export function viewEscrowKeyboard(escrowId) {
   return Markup.inlineKeyboard([
     [Markup.button.callback("👁 View Escrow", `VIEW_ESCROW:${escrowId}`)],
@@ -168,7 +161,7 @@ export function escrowHistoryKeyboard() {
   return Markup.inlineKeyboard([
     [Markup.button.callback("📥 Pending", "ESCROW_LIST:pending:1")],
 
-    [Markup.button.callback("💰 Awaiting Funding", "ESCROW_LIST:funding:1")],
+    [Markup.button.callback("💰 Cancelled", "ESCROW_LIST:cancelled:1")],
 
     [Markup.button.callback("🔒 Active", "ESCROW_ACTIVE:1")],
 

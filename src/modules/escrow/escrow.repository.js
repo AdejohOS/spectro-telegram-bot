@@ -15,6 +15,12 @@ export class EscrowRepository {
     return escrow;
   }
 
+  static async createTx(tx, data) {
+    const [escrow] = await tx.insert(escrows).values(data).returning();
+
+    return escrow;
+  }
+
   static async findById(id) {
     const [escrow] = await db.select().from(escrows).where(eq(escrows.id, id));
 

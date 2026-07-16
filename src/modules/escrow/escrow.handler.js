@@ -17,8 +17,16 @@ export function registerEscrowHandler(bot) {
 
     if (state) {
       if (state.step === "SELLER") {
+        const sellerUsername = ctx.message.text.trim();
+
+        if (!sellerUsername.startsWith("@") || sellerUsername.length === 1) {
+          return ctx.reply(
+            "Please enter the seller's full username, including @. Example: @username001",
+          );
+        }
+
         const seller = await UserRepository.findByUsername(
-          ctx.message.text.trim(),
+          sellerUsername.slice(1),
         );
 
         if (!seller) {
