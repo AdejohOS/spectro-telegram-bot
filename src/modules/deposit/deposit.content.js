@@ -1,15 +1,18 @@
-export function depositMessage(network, address) {
+export function depositMessage(network, amount, address) {
   return `
 💰 *${network} Deposit*
 
-Your unique deposit address:
+Amount
+
+*$${amount}*
+
+━━━━━━━━━━━━━━
+
+Deposit Address
 
 \`${address}\`
 
 ⚠️ Send *ONLY ${network}* to this address.
 
-Funds will be credited by an administrator after the transaction has been verified.
-
-If you have already made a deposit, tap *I Have Deposited* below.
-`;
+Once payment is completed, tap *I Have Deposited*.`;
 }

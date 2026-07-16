@@ -10,6 +10,9 @@ import { networkKeyboard } from "./admin.keyboard.js";
 import { skipKeyboard } from "./admin.keyboard.js";
 import { toMinorUnits } from "../../utils/money.js";
 import { AddressRepository } from "../address/address.repository.js";
+import { UserRepository } from "../users/user.repository.js";
+import { userDetailsContent } from "../lookup/lookup.content.js";
+import { AdminLookupRepository } from "../lookup/lookup.repositoy.js";
 
 export function registerAdminHandler(bot) {
   bot.on("text", async (ctx, next) => {
@@ -214,6 +217,55 @@ Submitted
 
 ${addresses.length}`,
       );
+    }
+
+    if (state.step === "LOOKUP_USERNAME") {
+      const username = ctx.message.text.trim();
+
+      if (!username.startsWith("@") || username.length === 1) {
+        return ctx.reply(
+          "Please enter the user's full username, including @. Example: @skilz071",
+        );
+      }
+
+      const user = await UserRepository.findByUsername(username.slice(1));
+      const profile = user
+        ? await AdminLookupRepository.getUserProfile(user.id)
+        : null;
+
+      if (!user) {
+        return ctx.reply("❌ User not found.");
+      }
+
+      clearAdminState(ctx.from.id);
+
+      return ctx.reply(userDetailsContent(profile), {
+        parse_mode: "HTML",
+      });
+    }
+
+    if (state.step === "LOOKUP_ADDRESS") {
+      const walletAddress = ctx.message.text.trim();
+      const address =
+        await AddressRepository.findByWalletAddress(walletAddress);
+
+      if (!address || !address.assignedUserId) {
+        return ctx.reply("User not found for this address.");
+      }
+
+      const profile = await AdminLookupRepository.getUserProfile(
+        address.assignedUserId,
+      );
+
+      if (!profile) {
+        return ctx.reply("User not found for this address.");
+      }
+
+      clearAdminState(ctx.from.id);
+
+      return ctx.reply(userDetailsContent(profile), {
+        parse_mode: "HTML",
+      });
     }
 
     return next();

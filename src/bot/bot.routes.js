@@ -5,6 +5,7 @@ import { registerRulesAction } from "../modules/rules/rules.action.js";
 import { registerNavigationAction } from "../modules/navigation/navigation.action.js";
 import { registerProfileHandler } from "../modules/profile/profile.action.js";
 import { registerDepositAction } from "../modules/deposit/deposit.actions.js";
+import { registerDepositHandler } from "../modules/deposit/deposit.handler.js";
 import { registerAdminHandler } from "../modules/admin/admin.handler.js";
 import { registerAdminActions } from "../modules/admin/admin.action.js";
 import { registerEscrowActions } from "../modules/escrow/escrow.actions.js";
@@ -24,6 +25,8 @@ import { registerFAQActions } from "../modules/faq/faq.action.js";
 
 import { registerAddressActions } from "../modules/address/address.action.js";
 
+import { registerAdminLookupActions } from "../modules/lookup/lookup.action.js";
+
 export function registerRoutes(bot) {
   bot.use(loggerMiddleware);
 
@@ -34,6 +37,7 @@ export function registerRoutes(bot) {
   registerProfileHandler(bot);
 
   registerDepositAction(bot);
+  registerDepositHandler(bot);
 
   registerAdminActions(bot);
   registerAdminHandler(bot);
@@ -56,6 +60,8 @@ export function registerRoutes(bot) {
   registerFAQActions(bot);
 
   registerAddressActions(bot);
+
+  registerAdminLookupActions(bot);
 
   // Commands
   // Actions

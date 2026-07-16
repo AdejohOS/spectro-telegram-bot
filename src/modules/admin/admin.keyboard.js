@@ -11,7 +11,10 @@ export function adminKeyboard() {
     [Markup.button.callback("📦 Shop", "ADMIN_PRODUCTS")],
     [Markup.button.callback("🏦 Address Pool", "ADDRESS_POOL")],
 
-    [Markup.button.callback("📊 Statistics", "ADMIN_STATS")],
+    [
+      Markup.button.callback("📊 Statistics", "ADMIN_STATS"),
+      Markup.button.callback("👥 User Lookup", "USER_LOOKUP"),
+    ],
 
     [Markup.button.callback("⬅️ Back to Main Menu", "MAIN_MENU")],
   ]);
