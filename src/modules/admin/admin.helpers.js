@@ -6,7 +6,7 @@ export async function sendConfirmation(ctx) {
   const state = getAdminState(ctx.from.id);
 
   return ctx.reply(creditConfirmation(state), {
-    parse_mode: "Markdown",
+    parse_mode: "HTML",
     reply_markup: confirmCreditKeyboard().reply_markup,
   });
 }
