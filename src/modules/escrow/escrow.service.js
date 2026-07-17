@@ -30,6 +30,8 @@ export class EscrowService {
         status: ESCROW_STATUS.PENDING_SELLER,
       });
 
+      console.log("Escrow status:", escrow.status);
+
       await EscrowEventRepository.create(tx, {
         escrowId: escrow.id,
         userId: buyerId,

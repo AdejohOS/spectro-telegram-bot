@@ -8,7 +8,7 @@ export function escrowKeyboard() {
     [
       Markup.button.callback(
         "📥 Pending Requests",
-        "ESCROW_LIST:pending_seller:1",
+        "ESCROW_LIST:awaiting_seller:1",
       ),
       Markup.button.callback("⏳ Active Escrows", "ESCROW_ACTIVE:1"),
     ],

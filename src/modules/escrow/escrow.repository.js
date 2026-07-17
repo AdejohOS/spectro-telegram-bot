@@ -157,7 +157,7 @@ export class EscrowRepository {
       .where(
         and(
           or(
-            eq(escrows.status, ESCROW_STATUS.FUNDED),
+            eq(escrows.status, ESCROW_STATUS.ACCEPTED),
             eq(escrows.status, ESCROW_STATUS.DELIVERED),
           ),
           or(eq(escrows.buyerId, userId), eq(escrows.sellerId, userId)),
@@ -181,6 +181,7 @@ export class EscrowRepository {
       .limit(limit)
       .offset((page - 1) * limit);
   }
+
   static async countByStatus(userId, status) {
     const result = await db
       .select({
@@ -203,7 +204,7 @@ export class EscrowRepository {
       .where(
         and(
           inArray(escrows.status, [
-            ESCROW_STATUS.FUNDED,
+            ESCROW_STATUS.ACCEPTED,
             ESCROW_STATUS.DELIVERED,
           ]),
           or(eq(escrows.buyerId, userId), eq(escrows.sellerId, userId)),
@@ -222,7 +223,7 @@ export class EscrowRepository {
       .where(
         and(
           inArray(escrows.status, [
-            ESCROW_STATUS.FUNDED,
+            ESCROW_STATUS.ACCEPTED,
             ESCROW_STATUS.DELIVERED,
           ]),
           or(eq(escrows.buyerId, userId), eq(escrows.sellerId, userId)),
