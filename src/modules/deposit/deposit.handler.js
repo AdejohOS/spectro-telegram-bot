@@ -44,6 +44,46 @@ export function registerDepositHandler(bot) {
       address: address.address,
     });
 
+    const admins = await UserRepository.findAdmins();
+
+    for (const admin of admins) {
+      await ctx.telegram.sendMessage(
+        admin.telegramId,
+        `🆕 <b>New Deposit Request</b>
+
+A user has initiated a deposit.
+
+━━━━━━━━━━━━━━
+
+👤 <b>User</b>
+
+${user.firstName}
+
+${user.username ? `@${user.username}` : "No Username"}
+
+🌐 <b>Network</b>
+
+${state.network}
+
+💰 <b>Amount</b>
+
+$${amount}
+
+🏦 <b>Deposit Address</b>
+
+<code>${address.address}</code>
+
+🟡 <b>Status</b>
+
+Waiting for blockchain payment.
+
+The user has not yet confirmed payment.`,
+        {
+          parse_mode: "HTML",
+        },
+      );
+    }
+
     return ctx.reply(depositMessage(state.network, amount, address.address), {
       parse_mode: "Markdown",
       reply_markup: depositAddressKeyboard().reply_markup,
