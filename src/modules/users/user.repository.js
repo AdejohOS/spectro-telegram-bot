@@ -73,4 +73,17 @@ export class UserRepository {
   static async findAdmins() {
     return db.select().from(users).where(eq(users.role, "admin"));
   }
+
+  static async updateStatus(userId, status) {
+    const [user] = await db
+      .update(users)
+      .set({
+        status,
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, userId))
+      .returning();
+
+    return user;
+  }
 }

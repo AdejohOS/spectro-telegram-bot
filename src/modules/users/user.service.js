@@ -37,4 +37,12 @@ export class UserService {
 
     return user;
   }
+
+  static async banUser(userId) {
+    return UserRepository.updateStatus(userId, "banned");
+  }
+
+  static async unBanUser(userId) {
+    return UserRepository.updateStatus(userId, "active");
+  }
 }

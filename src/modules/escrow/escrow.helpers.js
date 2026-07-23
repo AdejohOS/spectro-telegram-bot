@@ -17,11 +17,8 @@ export function resolveEscrowStatuses(type) {
     case "pending":
       return [ESCROW_STATUS.PENDING_SELLER];
 
-    case "funding":
-      return [ESCROW_STATUS.WAITING_FUNDING];
-
     case "active":
-      return [ESCROW_STATUS.FUNDED, ESCROW_STATUS.DELIVERED];
+      return [ESCROW_STATUS.ACCEPTED, ESCROW_STATUS.DELIVERED];
 
     case "completed":
       return [ESCROW_STATUS.COMPLETED];

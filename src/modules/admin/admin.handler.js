@@ -13,6 +13,7 @@ import { AddressRepository } from "../address/address.repository.js";
 import { UserRepository } from "../users/user.repository.js";
 import { userDetailsContent } from "../lookup/lookup.content.js";
 import { AdminLookupRepository } from "../lookup/lookup.repositoy.js";
+import { userDetailsKeyboard } from "../users/user.keyboard.js";
 
 export function registerAdminHandler(bot) {
   bot.on("text", async (ctx, next) => {
@@ -237,10 +238,13 @@ ${addresses.length}`,
         return ctx.reply("❌ User not found.");
       }
 
-      clearAdminState(ctx.from.id);
+      setAdminState(ctx.from.id, {
+        user: profile,
+      });
 
       return ctx.reply(userDetailsContent(profile), {
         parse_mode: "HTML",
+        reply_markup: userDetailsKeyboard(profile).reply_markup,
       });
     }
 
@@ -261,10 +265,13 @@ ${addresses.length}`,
         return ctx.reply("User not found for this address.");
       }
 
-      clearAdminState(ctx.from.id);
+      setAdminState(ctx.from.id, {
+        user: profile,
+      });
 
       return ctx.reply(userDetailsContent(profile), {
         parse_mode: "HTML",
+        reply_markup: userDetailsKeyboard(profile).reply_markup,
       });
     }
 

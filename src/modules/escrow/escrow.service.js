@@ -173,8 +173,8 @@ export class EscrowService {
         throw new Error("Unauthorized.");
       }
 
-      if (escrow.status !== ESCROW_STATUS.FUNDED) {
-        throw new Error("Escrow is not funded.");
+      if (escrow.status !== ESCROW_STATUS.ACCEPTED) {
+        throw new Error("Escrow is not ready for delivery");
       }
 
       const updated = await EscrowRepository.update(tx, escrow.id, {
@@ -332,12 +332,7 @@ export class EscrowService {
 
           break;
 
-        case ESCROW_STATUS.WAITING_FUNDING:
-          summary.funding = Number(row.total);
-
-          break;
-
-        case ESCROW_STATUS.FUNDED:
+        case ESCROW_STATUS.ACCEPTED:
 
         case ESCROW_STATUS.DELIVERED:
           summary.active += Number(row.total);
@@ -387,7 +382,7 @@ export class EscrowService {
       }
 
       if (
-        escrow.status !== ESCROW_STATUS.FUNDED &&
+        escrow.status !== ESCROW_STATUS.ACCEPTED &&
         escrow.status !== ESCROW_STATUS.DELIVERED
       ) {
         throw new Error("Disputes can only be opened after funding.");

@@ -118,7 +118,7 @@ export function escrowDetailsKeyboard(escrow, currentUserId) {
 
   // Seller marks delivered
   if (
-    escrow.status === ESCROW_STATUS.FUNDED &&
+    escrow.status === ESCROW_STATUS.ACCEPTED &&
     escrow.sellerTelegramId === currentUserId
   ) {
     buttons.push([
@@ -129,17 +129,20 @@ export function escrowDetailsKeyboard(escrow, currentUserId) {
     ]);
   }
 
-  // Buyer releases payment or disputes
+  //// Buyer can dispute once seller has accepted
   if (
-    escrow.status === ESCROW_STATUS.DELIVERED &&
+    (escrow.status === ESCROW_STATUS.ACCEPTED ||
+      escrow.status === ESCROW_STATUS.DELIVERED) &&
     escrow.buyerTelegramId === currentUserId
   ) {
-    buttons.push([
-      Markup.button.callback(
-        "✅ Release Payment",
-        `RELEASE_ESCROW:${escrow.id}`,
-      ),
-    ]);
+    if (escrow.status === ESCROW_STATUS.DELIVERED) {
+      buttons.push([
+        Markup.button.callback(
+          "✅ Release Payment",
+          `RELEASE_ESCROW:${escrow.id}`,
+        ),
+      ]);
+    }
 
     buttons.push([
       Markup.button.callback("⚖️ Open Dispute", `DISPUTE_ESCROW:${escrow.id}`),
@@ -159,7 +162,7 @@ export function viewEscrowKeyboard(escrowId) {
 
 export function escrowHistoryKeyboard() {
   return Markup.inlineKeyboard([
-    [Markup.button.callback("📥 Pending", "ESCROW_LIST:pending:1")],
+    [Markup.button.callback("📥 Pending", "ESCROW_LIST:awaiting_seller:1")],
 
     [Markup.button.callback("💰 Cancelled", "ESCROW_LIST:cancelled:1")],
 

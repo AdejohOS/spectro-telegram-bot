@@ -9,7 +9,11 @@ import {
 
 export const userRoleEnum = pgEnum("user_role", ["user", "admin"]);
 
-export const userStatusEnum = pgEnum("user_status", ["active", "blocked"]);
+export const userStatusEnum = pgEnum("user_status", [
+  "active",
+  "suspended",
+  "banned",
+]);
 
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),

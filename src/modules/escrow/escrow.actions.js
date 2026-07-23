@@ -186,14 +186,10 @@ The buyer cancelled this escrow before acceptance.`,
 
       const escrow = await EscrowService.acceptEscrow(escrowId, seller.id);
 
-      await ctx.editMessageText(
-        `✅ <b>Escrow Accepted</b>
-
-Funds are locked. You may now deliver the item.`,
-        {
-          parse_mode: "HTML",
-        },
-      );
+      await ctx.editMessageText(escrowDetailsContent(details), {
+        parse_mode: "HTML",
+        reply_markup: escrowDetailsKeyboard(details, ctx.from.id).reply_markup,
+      });
 
       const details = await EscrowService.getEscrow(escrow.id);
 
@@ -314,15 +310,11 @@ Please inspect it carefully before releasing payment.`,
           },
         );
 
-        await ctx.editMessageText(
-          `📦 <b>Marked as Delivered</b>
-
-Waiting for buyer confirmation.`,
-
-          {
-            parse_mode: "HTML",
-          },
-        );
+        await ctx.editMessageText(escrowDetailsContent(details), {
+          parse_mode: "HTML",
+          reply_markup: escrowDetailsKeyboard(details, ctx.from.id)
+            .reply_markup,
+        });
       } catch (error) {
         console.error(error);
 
@@ -380,75 +372,6 @@ Thank you for using Spectro.`,
 
       await ctx.reply(error.message);
     }
-  });
-
-  bot.action("ESCROW_WAITING_FUNDING", async (ctx) => {
-    await ctx.answerCbQuery();
-
-    const data = await EscrowService.listByStatus(
-      ctx.from.id,
-      ESCROW_STATUS.CANCELLED,
-      1,
-    );
-
-    await ctx.editMessageText(
-      escrowListContent(
-        "Cancelled Escrows",
-        data.escrows,
-        data.page,
-        data.total,
-        data.limit,
-      ),
-      {
-        parse_mode: "HTML",
-        reply_markup: escrowListKeyboard(
-          ESCROW_STATUS.CANCELLED,
-          data.page,
-          Math.ceil(data.total / data.limit),
-          data.escrows,
-        ).reply_markup,
-      },
-    );
-  });
-
-  bot.action("ESCROW_COMPLETED", async (ctx) => {
-    await ctx.answerCbQuery();
-
-    const escrows = await EscrowService.getCompleted(ctx.from.id);
-
-    await ctx.editMessageText(
-      escrowListContent("✅ Completed Escrows", escrows),
-      {
-        parse_mode: "HTML",
-        reply_markup: pendingEscrowsKeyboard(escrows).reply_markup,
-      },
-    );
-  });
-  bot.action("ESCROW_REJECTED", async (ctx) => {
-    await ctx.answerCbQuery();
-
-    const escrows = await EscrowService.getRejected(ctx.from.id);
-
-    await ctx.editMessageText(
-      escrowListContent("❌ Rejected Escrows", escrows),
-      {
-        parse_mode: "HTML",
-        reply_markup: pendingEscrowsKeyboard(escrows).reply_markup,
-      },
-    );
-  });
-  bot.action("ESCROW_DISPUTED", async (ctx) => {
-    await ctx.answerCbQuery();
-
-    const escrows = await EscrowService.getDisputed(ctx.from.id);
-
-    await ctx.editMessageText(
-      escrowListContent("⚖️ Disputed Escrows", escrows),
-      {
-        parse_mode: "HTML",
-        reply_markup: pendingEscrowsKeyboard(escrows).reply_markup,
-      },
-    );
   });
 
   bot.action(/^ESCROW_LIST:(.+):(\d+)$/, async (ctx) => {
@@ -541,17 +464,19 @@ Thank you for using Spectro.`,
     await ctx.reply(
       `⚖️ <b>Open Dispute</b>
 
-Please describe the reason for this dispute.
+Tell us why you are opening this dispute.
 
 Examples:
 
+• Seller accepted but has not delivered
+
 • Item not delivered
 
-• Wrong item
+• Wrong item received
 
-• Buyer is requesting something outside the agreement
+• Item damaged
 
-• Product damaged`,
+• Buyer/Seller is not following the agreement`,
       {
         parse_mode: "HTML",
         reply_markup: {

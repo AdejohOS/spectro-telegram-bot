@@ -27,10 +27,14 @@ import { registerAddressActions } from "../modules/address/address.action.js";
 
 import { registerAdminLookupActions } from "../modules/lookup/lookup.action.js";
 
+import { registerUserActions } from "../modules/users/user.action.js";
+
 export function registerRoutes(bot) {
   bot.use(loggerMiddleware);
 
   registerStartCommand(bot);
+
+  registerUserActions(bot);
 
   registerRulesAction(bot);
   registerNavigationAction(bot);
