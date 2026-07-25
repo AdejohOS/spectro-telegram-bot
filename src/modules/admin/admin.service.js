@@ -54,6 +54,20 @@ export class AdminService {
       notes: state.notes,
     });
   }
+  static async debitWallet(state, adminTelegramId) {
+    const admin = await UserRepository.findByTelegramId(adminTelegramId);
+
+    if (!admin) {
+      throw new Error("Admin user not found.");
+    }
+
+    return WalletService.debit({
+      userId: state.user.id,
+      adminId: admin.id,
+      amount: state.amount,
+      notes: state.notes,
+    });
+  }
   static async getStatistics() {
     return AdminRepository.getStatistics();
   }

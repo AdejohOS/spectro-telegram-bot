@@ -10,8 +10,8 @@ import {
 } from "./admin.state.js";
 import { AdminService } from "./admin.service.js";
 
-import { creditConfirmation } from "./admin.content.js";
-import { confirmCreditKeyboard } from "./admin.keyboard.js";
+import { walletConfirmation } from "./admin.content.js";
+import { confirmWalletActionKeyboard } from "./admin.keyboard.js";
 import { skipKeyboard } from "./admin.keyboard.js";
 import { sendConfirmation } from "./admin.helpers.js";
 import { adminDisputeKeyboard } from "./admin.dispute.keyboard.js";
@@ -68,6 +68,21 @@ export function registerAdminActions(bot) {
   bot.action("ADMIN_CREDIT", async (ctx) => {
     await ctx.answerCbQuery();
 
+    setAdminState(ctx.from.id, {
+      action: "credit",
+    });
+
+    await ctx.editMessageText("How would you like to find the user?", {
+      reply_markup: searchUserKeyboard().reply_markup,
+    });
+  });
+  bot.action("ADMIN_DEBIT", async (ctx) => {
+    await ctx.answerCbQuery();
+
+    setAdminState(ctx.from.id, {
+      action: "debit",
+    });
+
     await ctx.editMessageText("How would you like to find the user?", {
       reply_markup: searchUserKeyboard().reply_markup,
     });
@@ -75,7 +90,10 @@ export function registerAdminActions(bot) {
   bot.action("SEARCH_USERNAME", async (ctx) => {
     await ctx.answerCbQuery();
 
+    const state = getAdminState(ctx.from.id);
+
     setAdminState(ctx.from.id, {
+      ...state,
       step: "SEARCH_USERNAME",
       startedAt: Date.now(),
     });
@@ -93,7 +111,9 @@ export function registerAdminActions(bot) {
   bot.action("SEARCH_ADDRESS", async (ctx) => {
     await ctx.answerCbQuery();
 
+    const state = getAdminState(ctx.from.id);
     setAdminState(ctx.from.id, {
+      ...state,
       step: "SEARCH_ADDRESS",
     });
 
@@ -171,7 +191,7 @@ export function registerAdminActions(bot) {
     return sendConfirmation(ctx);
   });
 
-  bot.action("CONFIRM_CREDIT", async (ctx) => {
+  bot.action("CONFIRM_WALLET_ACTION", async (ctx) => {
     console.log("1. Confirm clicked");
 
     await ctx.answerCbQuery();
@@ -183,14 +203,29 @@ export function registerAdminActions(bot) {
     console.log("3. State:", state);
 
     try {
-      const wallet = await AdminService.creditWallet(state, ctx.from.id);
+      let wallet;
+
+      if (state.action === "credit") {
+        wallet = await AdminService.creditWallet(state, ctx.from.id);
+      } else if (state.action === "debit") {
+        wallet = await AdminService.debitWallet(state, ctx.from.id);
+      } else {
+        throw new Error("Invalid wallet action.");
+      }
 
       console.log("4. Wallet credited:", wallet);
 
       clearAdminState(ctx.from.id);
 
+      const actionTitle =
+        state.action === "debit"
+          ? "Wallet Debited Successfully"
+          : "Wallet Credited Successfully";
+
+      const actionWord = state.action === "debit" ? "debited" : "credited";
+
       await ctx.editMessageText(
-        `✅ <b>Wallet Credited Successfully</b>
+        `✅ <b>${actionTitle}</b>
 
 👤 <b>User:</b> ${
           state.user.username ? `@${state.user.username}` : state.user.firstName
@@ -207,11 +242,18 @@ export function registerAdminActions(bot) {
       );
 
       try {
+        const emoji = state.action === "debit" ? "💸" : "🎉";
+
+        const userTitle =
+          state.action === "debit" ? "Wallet Debited" : "Wallet Credited";
+
         await ctx.telegram.sendMessage(
           state.user.telegramId,
-          `🎉 <b>Wallet Credited</b>
+          `${emoji} <b>${userTitle}</b>
 
-Your wallet has been credited successfully.
+Your wallet has been ${
+            state.action === "debit" ? "debited" : "credited"
+          } successfully.
 
 💰 <b>Amount:</b> <b>$${formatMoney(state.amount)}</b>
 
@@ -235,7 +277,7 @@ Thank you for using Spectro.`,
     }
   });
 
-  bot.action("CANCEL_CREDIT", async (ctx) => {
+  bot.action("CANCEL_WALLET_ACTION", async (ctx) => {
     await ctx.answerCbQuery();
 
     clearAdminState(ctx.from.id);

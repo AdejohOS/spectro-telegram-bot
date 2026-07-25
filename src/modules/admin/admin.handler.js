@@ -43,6 +43,7 @@ export function registerAdminHandler(bot) {
       }
 
       setAdminState(ctx.from.id, {
+        ...state,
         step: "ENTER_AMOUNT",
 
         user: {
@@ -53,13 +54,15 @@ export function registerAdminHandler(bot) {
         },
       });
 
+      const actionText = state.action === "debit" ? "debit" : "credit";
+
       return ctx.reply(
         `✅ User Found
 
 ${user.firstName}
 @${user.username ?? "No Username"}
 
-Enter the amount to credit.`,
+Enter the amount to ${actionText}.`,
         {
           reply_markup: {
             force_reply: true,
@@ -79,6 +82,7 @@ Enter the amount to credit.`,
       }
 
       setAdminState(ctx.from.id, {
+        ...state,
         step: "ENTER_AMOUNT",
 
         user: {
@@ -89,13 +93,14 @@ Enter the amount to credit.`,
         },
       });
 
+      const actionText = state.action === "debit" ? "debit" : "credit";
       return ctx.reply(
         `✅ User Found
 
 ${user.firstName}
 @${user.username ?? "No Username"}
 
-Enter the amount to credit.`,
+Enter the amount to ${actionText}.`,
         {
           reply_markup: {
             force_reply: true,
@@ -111,10 +116,24 @@ Enter the amount to credit.`,
         return ctx.reply("❌ Please enter a valid amount.");
       }
 
+      // Debit skips network and tx hash
+      if (state.action === "debit") {
+        setAdminState(ctx.from.id, {
+          ...state,
+          amount,
+          step: "ENTER_NOTES",
+        });
+
+        return ctx.reply("Enter the reason for this debit.\n\nOr tap Skip.", {
+          reply_markup: skipKeyboard("SKIP_NOTE").reply_markup,
+        });
+      }
+
+      // Credit flow
       setAdminState(ctx.from.id, {
         ...state,
-        step: "ENTER_NETWORK",
         amount,
+        step: "ENTER_NETWORK",
       });
 
       return ctx.reply("Select the deposit network.", {

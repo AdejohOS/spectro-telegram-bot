@@ -1,12 +1,12 @@
 import { getAdminState } from "./admin.state.js";
-import { creditConfirmation } from "./admin.content.js";
-import { confirmCreditKeyboard } from "./admin.keyboard.js";
+import { walletConfirmation } from "./admin.content.js";
+import { confirmWalletActionKeyboard } from "./admin.keyboard.js";
 
 export async function sendConfirmation(ctx) {
   const state = getAdminState(ctx.from.id);
 
-  return ctx.reply(creditConfirmation(state), {
+  return ctx.reply(walletConfirmation(state), {
     parse_mode: "HTML",
-    reply_markup: confirmCreditKeyboard().reply_markup,
+    reply_markup: confirmWalletActionKeyboard().reply_markup,
   });
 }

@@ -186,31 +186,27 @@ The buyer cancelled this escrow before acceptance.`,
 
       const escrow = await EscrowService.acceptEscrow(escrowId, seller.id);
 
+      const details = await EscrowService.getEscrow(escrow.id);
+
       await ctx.editMessageText(escrowDetailsContent(details), {
         parse_mode: "HTML",
         reply_markup: escrowDetailsKeyboard(details, ctx.from.id).reply_markup,
       });
 
-      const details = await EscrowService.getEscrow(escrow.id);
-
       await ctx.telegram.sendMessage(
         details.buyerTelegramId,
-
         `<b>✅ Escrow Accepted</b>
 
 The seller has accepted your escrow.
 
 Funds are locked and the escrow is now active.`,
-
         {
           parse_mode: "HTML",
-
           reply_markup: viewEscrowKeyboard(details.id).reply_markup,
         },
       );
     } catch (error) {
       console.error(error);
-
       await ctx.reply(error.message);
     }
   });

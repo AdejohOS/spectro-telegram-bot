@@ -76,6 +76,47 @@ export class WalletService {
     });
   }
 
+  static async debit({ userId, adminId, amount, notes }) {
+    return db.transaction(async (tx) => {
+      const wallet = await WalletRepository.findByUserIdTx(tx, userId);
+
+      if (!wallet) {
+        throw new Error("Wallet not found");
+      }
+
+      if (wallet.availableBalance < amount) {
+        throw new Error("Insufficient available balance");
+      }
+
+      const balanceBefore = wallet.availableBalance;
+      const balanceAfter = balanceBefore - amount;
+
+      await WalletRepository.updateBalance(
+        tx,
+        wallet.id,
+        balanceAfter,
+        wallet.lockedBalance,
+      );
+
+      const reference = generateReference(REFERENCES.ADMIN_DEBIT);
+
+      await WalletTransactionRepository.create(tx, {
+        walletId: wallet.id,
+        userId,
+        type: "admin_debit",
+        amount,
+        balanceBefore,
+        balanceAfter,
+        reference,
+        status: "completed",
+        notes,
+        createdBy: adminId,
+      });
+
+      return WalletRepository.findByUserIdTx(tx, userId);
+    });
+  }
+
   static async lockFunds(tx, { userId, amount, reference, notes }) {
     const wallet = await WalletRepository.findByUserIdTx(tx, userId);
 

@@ -22,6 +22,7 @@ export const REFERENCES = {
   DEPOSIT: "DEP",
 
   ADMIN_CREDIT: "ADM",
+  ADMIN_DEBIT: "ADD",
 
   ESCROW_LOCK: "ESL",
   ESCROW_RELEASE: "ESR",

@@ -6,7 +6,10 @@ export function adminKeyboard() {
       Markup.button.callback("💳 Credit Wallet", "ADMIN_CREDIT"),
       Markup.button.callback("💸 Withdrawals", "ADMIN_WITHDRAWALS"),
     ],
-    [Markup.button.callback("⏳ Disputes", "ADMIN_DISPUTES")],
+    [
+      Markup.button.callback("⏳ Disputes", "ADMIN_DISPUTES"),
+      Markup.button.callback("💰 Debit Wallet", "ADMIN_DEBIT"),
+    ],
 
     [Markup.button.callback("📦 Shop", "ADMIN_PRODUCTS")],
     [Markup.button.callback("🏦 Address Pool", "ADDRESS_POOL")],
@@ -39,10 +42,10 @@ export function networkKeyboard() {
   ]);
 }
 
-export function confirmCreditKeyboard() {
+export function confirmWalletActionKeyboard() {
   return Markup.inlineKeyboard([
-    [Markup.button.callback("✅ Confirm", "CONFIRM_CREDIT")],
-    [Markup.button.callback("❌ Cancel", "CANCEL_CREDIT")],
+    [Markup.button.callback("✅ Confirm", "CONFIRM_WALLET_ACTION")],
+    [Markup.button.callback("❌ Cancel", "CANCEL_WALLET_ACTION")],
   ]);
 }
 export function skipKeyboard(callback) {

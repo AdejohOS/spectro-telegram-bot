@@ -1,37 +1,47 @@
 import { formatMoney } from "../../utils/money.js";
 
-export function creditConfirmation(state) {
-  return `
-💳 *Confirm Wallet Credit*
+export function walletConfirmation(state) {
+  const isDebit = state.action === "debit";
 
-━━━━━━━━━━━━━━━━━━
+  let content = `
+<b>${isDebit ? "💸 Confirm Wallet Debit" : "💰 Confirm Wallet Credit"}</b>
 
-👤 User
+━━━━━━━━━━━━━━
+
+<b>User</b>
 
 ${state.user.firstName}
+@${state.user.username ?? "No Username"}
 
-${state.user.username ? `@${state.user.username}` : "No Username"}
+<b>Amount</b>
 
-💰 Amount
+${state.amount}
+`;
 
-*$${formatMoney(state.amount)}*
+  // Only credits have blockchain information
+  if (!isDebit) {
+    content += `
 
-🌐 Network
+<b>Network</b>
 
 ${state.network}
 
-🔗 Transaction Hash
+<b>Transaction Hash</b>
 
-${state.txHash ?? "Not Provided"}
+<code>${state.txHash}</code>`;
+  }
 
-📝 Notes
+  content += `
 
-${state.notes ?? "Not Provided"}
+<b>Notes</b>
 
-━━━━━━━━━━━━━━━━━━
+${state.notes || "None"}
 
-Press *Confirm* to credit the wallet.
-`;
+━━━━━━━━━━━━━━
+
+Are you sure you want to ${isDebit ? "debit" : "credit"} this wallet?`;
+
+  return content;
 }
 export function withdrawalListContent(title, withdrawals, page, totalPages) {
   let text = `<b>${title}</b>\n\n`;
