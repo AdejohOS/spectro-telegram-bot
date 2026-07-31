@@ -2,7 +2,11 @@ import { AddressService } from "../address/address.service.js";
 import { UserRepository } from "../users/user.repository.js";
 import { depositMessage } from "./deposit.content.js";
 import { depositAddressKeyboard } from "./deposit.keyboard.js";
-import { getDepositState, setDepositState } from "./deposit.state.js";
+import {
+  getDepositState,
+  setDepositState,
+  clearDepositState,
+} from "./deposit.state.js";
 
 export function registerDepositHandler(bot) {
   bot.on("text", async (ctx, next) => {
@@ -88,5 +92,7 @@ The user has not yet confirmed payment.`,
       parse_mode: "Markdown",
       reply_markup: depositAddressKeyboard().reply_markup,
     });
+
+    clearDepositState(ctx.from.id);
   });
 }
