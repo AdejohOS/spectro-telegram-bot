@@ -74,21 +74,21 @@ export function registerEscrowActions(bot) {
       clearEscrowState(ctx.from.id);
 
       await ctx.editMessageText(
-        `✅ *Escrow Created Successfully*
+        `✅ <b>Escrow Created Successfully</b>
 
-Escrow Number:
+<b>Escrow Number</b>
 
-\`${escrow.escrowNumber}\`
+<code>${escrow.escrowNumber}</code>
 
-Status:
+<b>Status</b>
 
-*${escrow.status.toUpperCase()}*
+<b>${escrow.status.toUpperCase()}</b>
 
 💰 Your funds have been securely locked.
 
 Waiting for the seller to accept.`,
         {
-          parse_mode: "Markdown",
+          parse_mode: "HTML",
         },
       );
       const details = await EscrowService.getEscrow(escrow.id);

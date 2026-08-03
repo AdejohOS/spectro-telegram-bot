@@ -3,18 +3,22 @@ import { escrowStatusLabel } from "../../utils/references.js";
 
 export function escrowConfirmation(state) {
   return `
-🤝 *Confirm Escrow*
+<b>🤝 Confirm Escrow</b>
 
-👤 Seller:
-@${state.seller.username}
+<b>👤 Seller</b>
 
-💰 Amount:
-*$${formatMoney(state.amount)}*
+${state.seller.username ? `@${state.seller.username}` : state.seller.firstName}
 
-📦 Title:
+<b>💰 Amount</b>
+
+<b>$${formatMoney(state.amount)}</b>
+
+<b>📦 Title</b>
+
 ${state.title}
 
-📝 Description:
+<b>📝 Description</b>
+
 ${state.description}
 
 ━━━━━━━━━━━━━━

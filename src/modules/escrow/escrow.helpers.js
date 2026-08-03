@@ -7,7 +7,7 @@ export async function sendEscrowConfirmation(ctx) {
   const state = getEscrowState(ctx.from.id);
 
   return ctx.reply(escrowConfirmation(state), {
-    parse_mode: "Markdown",
+    parse_mode: "HTML",
     reply_markup: confirmEscrowKeyboard().reply_markup,
   });
 }
