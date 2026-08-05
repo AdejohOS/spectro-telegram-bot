@@ -149,6 +149,7 @@ Please review the escrow before accepting.`,
         ctx.match[1],
         ctx.from.id,
       );
+
       const details = await EscrowService.getEscrow(escrow.id);
 
       await ctx.editMessageText(
@@ -160,16 +161,24 @@ Your locked funds have been refunded to your wallet.`,
         },
       );
 
-      await ctx.telegram.sendMessage(
-        details.sellerTelegramId,
-        `<b>Escrow Cancelled</b>
+      // Notify seller if possible
+      try {
+        await ctx.telegram.sendMessage(
+          details.sellerTelegramId,
+          `<b>Escrow Cancelled</b>
 
 The buyer cancelled this escrow before acceptance.`,
-        {
-          parse_mode: "HTML",
-          reply_markup: viewEscrowKeyboard(details.id).reply_markup,
-        },
-      );
+          {
+            parse_mode: "HTML",
+            reply_markup: viewEscrowKeyboard(details.id).reply_markup,
+          },
+        );
+      } catch (err) {
+        console.error(
+          `Failed to notify seller (${details.sellerTelegramId}):`,
+          err.description || err.message,
+        );
+      }
     } catch (error) {
       console.error(error);
       await ctx.reply(error.message);

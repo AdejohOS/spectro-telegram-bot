@@ -56,4 +56,29 @@ $50`,
       },
     );
   });
+
+  bot.action("I_HAVE_DEPOSITED", async (ctx) => {
+    await ctx.answerCbQuery();
+
+    const state = getDepositState(ctx.from.id);
+
+    if (!state?.network || !state?.amount || !state?.address) {
+      return ctx.reply("Deposit session expired. Please start again.");
+    }
+
+    // Notify admins...
+
+    clearDepositState(ctx.from.id);
+
+    await ctx.editMessageText(
+      `✅ <b>Notification Sent</b>
+
+Your administrators have been notified.
+
+Your wallet will be credited after your transaction has been verified.`,
+      {
+        parse_mode: "HTML",
+      },
+    );
+  });
 }
