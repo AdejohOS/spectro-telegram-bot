@@ -17,7 +17,11 @@ export function registerWithdrawalHandler(bot) {
       const amount = Number(ctx.message.text);
 
       if (Number.isNaN(amount) || amount <= 0) {
-        return ctx.reply("Invalid amount.");
+        return ctx.reply("❌ Please enter a valid amount.");
+      }
+
+      if (amount < 50) {
+        return ctx.reply("❌ Minimum withdrawal is $50.");
       }
 
       setWithdrawalState(ctx.from.id, {
