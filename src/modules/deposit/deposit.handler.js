@@ -10,6 +10,10 @@ import {
 
 export function registerDepositHandler(bot) {
   bot.on("text", async (ctx, next) => {
+    if (ctx.chat.type !== "private") {
+      return next();
+    }
+
     const state = getDepositState(ctx.from.id);
 
     if (!state) {
