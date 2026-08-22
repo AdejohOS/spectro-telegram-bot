@@ -9,7 +9,7 @@ Our support team is here to help.
 
 👨‍💻 <b>Support Agent</b>
 
-@SpectroAssist
+@Spectroassist2
 
 ━━━━━━━━━━━━━━━━━━
 
