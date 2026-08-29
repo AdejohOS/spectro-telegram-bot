@@ -4,27 +4,20 @@ export function orderDetailsContent(order) {
   return `<b>🛒 Order Details</b>
 
 ━━━━━━━━━━━━━━
-
 <b>Reference</b>
-
 <code>${order.orderNumber}</code>
 
 <b>Buyer</b>
-
 @${order.buyerUsername || "N/A"}
-
 ${order.buyerFirstName}
 
 <b>Product</b>
-
 ${order.productTitle}
 
 <b>Amount</b>
-
 💰 ${formatMoney(order.amount)}
 
 <b>Status</b>
-
 ${order.status.toUpperCase()}
 
 ━━━━━━━━━━━━━━`;

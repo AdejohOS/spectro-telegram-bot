@@ -3,13 +3,10 @@ export function depositMessage(network, amount, address) {
 💰 *${network} Deposit*
 
 Amount
-
 *$${amount}*
 
 ━━━━━━━━━━━━━━
-
 Deposit Address
-
 \`${address}\`
 
 ⚠️ Send *ONLY ${network}* to this address.

@@ -7,14 +7,11 @@ export function walletConfirmation(state) {
 <b>${isDebit ? "💸 Confirm Wallet Debit" : "💰 Confirm Wallet Credit"}</b>
 
 ━━━━━━━━━━━━━━
-
 <b>User</b>
-
 ${state.user.firstName}
 @${state.user.username ?? "No Username"}
 
 <b>Amount</b>
-
 ${state.amount}
 `;
 
@@ -23,22 +20,18 @@ ${state.amount}
     content += `
 
 <b>Network</b>
-
 ${state.network}
 
 <b>Transaction Hash</b>
-
 <code>${state.txHash}</code>`;
   }
 
   content += `
 
 <b>Notes</b>
-
 ${state.notes || "None"}
 
 ━━━━━━━━━━━━━━
-
 Are you sure you want to ${isDebit ? "debit" : "credit"} this wallet?`;
 
   return content;
@@ -64,31 +57,23 @@ export function adminWithdrawalDetailsContent(withdrawal) {
   return `<b>💸 Withdrawal Details</b>
 
 ━━━━━━━━━━━━━━
-
 <b>Reference</b>
-
 <code>${withdrawal.reference}</code>
 
 <b>User</b>
-
 @${withdrawal.username || "N/A"}
-
 ${withdrawal.firstName}
 
 <b>Amount</b>
-
 💰 ${formatMoney(withdrawal.amount)} USDT
 
 <b>Network</b>
-
 ${withdrawal.network}
 
 <b>Wallet Address</b>
-
 <code>${withdrawal.address}</code>
 
 <b>Status</b>
-
 ${withdrawal.status.toUpperCase()}
 
 ━━━━━━━━━━━━━━`;
@@ -98,16 +83,12 @@ export function statisticsContent(stats) {
   return `📊 <b>Platform Statistics</b>
 
 ━━━━━━━━━━━━━━━━━━
-
 👥 <b>Users</b>
-
 Total Users
 ${stats.totalUsers}
 
 ━━━━━━━━━━━━━━━━━━
-
 ₿ <b>Bitcoin Addresses</b>
-
 Total
 ${stats.btcTotal}
 
@@ -118,7 +99,6 @@ Available
 ${stats.btcAvailable}
 
 ━━━━━━━━━━━━━━━━━━
-
 💵 <b>TRC20 Addresses</b>
 
 Total
@@ -131,32 +111,24 @@ Available
 ${stats.trcAvailable}
 
 ━━━━━━━━━━━━━━━━━━
-
 👛 <b>Wallets</b>
 
 Available Balance
-
 ${formatMoney(stats.totalWallet)} USDT
 
 Locked Balance
-
 ${formatMoney(stats.totalLocked)} USDT
 
 ━━━━━━━━━━━━━━━━━━
-
 🤝 Escrows
-
 ${stats.totalEscrows}
 
 🛒 Orders
-
 ${stats.totalOrders}
 
 💸 Withdrawals
-
 ${stats.totalWithdrawals}
 
 📦 Products
-
 ${stats.totalProducts}`;
 }

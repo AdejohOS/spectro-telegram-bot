@@ -37,20 +37,15 @@ export function addressStatisticsContent(network, stats) {
   return `📊 <b>${network} Statistics</b>
 
 ━━━━━━━━━━━━━━
-
 Total
-
 ${stats.total}
 
 Available
-
 ${stats.available}
 
 Assigned
-
 ${stats.assigned}
 
 Inactive
-
 ${stats.inactive}`;
 }

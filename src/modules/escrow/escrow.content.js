@@ -6,23 +6,15 @@ export function escrowConfirmation(state) {
 <b>🤝 Confirm Escrow</b>
 
 <b>👤 Seller</b>
-
 ${state.seller.username ? `@${state.seller.username}` : state.seller.firstName}
-
 <b>💰 Amount</b>
-
 <b>$${formatMoney(state.amount)}</b>
-
 <b>📦 Title</b>
-
 ${state.title}
-
 <b>📝 Description</b>
-
 ${state.description}
 
 ━━━━━━━━━━━━━━
-
 Do you want to create this escrow?
 `;
 }
@@ -68,45 +60,31 @@ export function escrowDetailsContent(escrow) {
 <b>🤝 Escrow Details</b>
  
 ━━━━━━━━━━━━━━━━━━
-
 <b>Escrow</b>
-
 <code>${escrow.escrowNumber}</code>
-
 <b>Status</b>
-
 ${escrowStatusLabel(escrow.status)}
 
 ━━━━━━━━━━━━━━━━━━
-
 <b>Buyer</b>
-
 @${escrow.buyerUsername}
 
 <b>Seller</b>
-
 @${escrow.sellerUsername}
 
 ━━━━━━━━━━━━━━━━━━
-
 <b>Amount</b>
-
 💰 <b>$${formatMoney(escrow.amount)}</b>
 
 ━━━━━━━━━━━━━━━━━━
-
 <b>Title</b>
-
 ${escrow.title}
 
 <b>Description</b>
-
 ${escrow.description}
 
 ━━━━━━━━━━━━━━━━━━
-
 <b>Created</b>
-
 ${new Date(escrow.createdAt).toLocaleString()}
 `;
 }
@@ -129,13 +107,9 @@ Showing ${start}-${end} of ${total}
 
   for (const escrow of escrows) {
     text += `━━━━━━━━━━━━━━
-
 <code>${escrow.escrowNumber}</code>
-
 📦 ${escrow.title}
-
 💰 $${formatMoney(escrow.amount)}
-
 ${escrowStatusLabel(escrow.status)}
 
 `;
@@ -150,33 +124,25 @@ export function escrowHistoryContent(summary) {
 <b>📜 Escrow History</b>
 
 ━━━━━━━━━━━━━━
-
 📥 Pending
-
 <b>${summary.pending}</b>
 
 💰 Cancelled
-
 <b>${summary.cancelled}</b>
 
 🔒 Active
-
 <b>${summary.active}</b>
 
 ✅ Completed
-
 <b>${summary.completed}</b>
 
 ❌ Rejected
-
 <b>${summary.rejected}</b>
 
 ⚖️ Disputed
-
 <b>${summary.disputed}</b>
 
 ━━━━━━━━━━━━━━
-
 Select a category below.
 
 `;
