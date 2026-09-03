@@ -27,7 +27,7 @@ export function registerDepositAction(bot) {
 
 Minimum Deposit
 
-$50`,
+$20`,
       {
         reply_markup: {
           force_reply: true,
@@ -48,7 +48,7 @@ $50`,
 
 Minimum Deposit
 
-$50`,
+$20`,
       {
         reply_markup: {
           force_reply: true,
