@@ -26,8 +26,8 @@ export function registerDepositHandler(bot) {
 
     const amount = Number(ctx.message.text);
 
-    if (Number.isNaN(amount) || amount < 50) {
-      return ctx.reply("❌ Minimum deposit is $50.");
+    if (Number.isNaN(amount) || amount < 20) {
+      return ctx.reply("❌ Minimum deposit is $20.");
     }
 
     const user = await UserRepository.findByTelegramId(ctx.from.id);

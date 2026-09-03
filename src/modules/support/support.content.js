@@ -1,3 +1,4 @@
+import { Support } from "../../config/admins";
 export function supportContent(userId) {
   return `🆘 <b>Spectro Support Center</b>
 
@@ -6,7 +7,7 @@ Need help with your account or a transaction?
 Our support team is here to help.
 
 👨‍💻 <b>Support Agent</b>
-@Spectroassist2
+@${Support}
 
 ━━━━━━━━━━━━━━━━━━
 <b>Common Issues</b>
