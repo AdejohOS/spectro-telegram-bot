@@ -3,21 +3,16 @@ import { formatMoney } from "../../utils/money.js";
 export function adminDisputeContent() {
   return `
 <b>⚖️ Dispute Center</b>
-
 ━━━━━━━━━━━━━━
-
 Manage all escrow disputes from here.
-
 🟡 Pending
 
 Review disputes awaiting a decision.
-
 ✅ Settled
 
 View disputes already resolved.
 
 ━━━━━━━━━━━━━━
-
 Select a category below.
 `;
 }
@@ -52,7 +47,6 @@ of ${data.total}
     text += `
 
 ━━━━━━━━━━━━━━
-
 <code>
 
 ${escrow.escrowNumber}
@@ -60,7 +54,6 @@ ${escrow.escrowNumber}
 </code>
 
 💰
-
 $${formatMoney(escrow.amount)}
 
 `;

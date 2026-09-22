@@ -1,9 +1,5 @@
 import { sendEscrowConfirmation } from "./escrow.helpers.js";
-import {
-  getEscrowState,
-  setEscrowState,
-  clearEscrowState,
-} from "./escrow.state.js";
+import { getEscrowState, setEscrowState } from "./escrow.state.js";
 import { UserRepository } from "../users/user.repository.js";
 import { getDisputeState, clearDisputeState } from "./dispute.state.js";
 import { EscrowService } from "./escrow.service.js";
@@ -17,9 +13,7 @@ export function registerEscrowHandler(bot) {
       return next();
     }
     const state = getEscrowState(ctx.from.id);
-    if (!state) {
-      return next();
-    }
+
     if (state) {
       if (state.step === "SELLER") {
         const sellerUsername = ctx.message.text.trim();

@@ -474,13 +474,9 @@ Tell us why you are opening this dispute.
 Examples:
 
 • Seller accepted but has not delivered
-
 • Item not delivered
-
 • Wrong item received
-
 • Item damaged
-
 • Buyer/Seller is not following the agreement`,
       {
         parse_mode: "HTML",

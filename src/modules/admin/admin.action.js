@@ -33,7 +33,6 @@ import { adminProductMenuKeyboard } from "./admin.product.keyboard.js";
 import { ProductService } from "../shop/product.service.js";
 import { productListContent } from "../shop/product.content.js";
 import { productListKeyboard } from "../shop/product.keyboard.js";
-import { productDetailsKeyboard } from "../shop/product.keyboard.js";
 
 import { adminStatisticsKeyboard } from "./admin.keyboard.js";
 import { statisticsContent } from "./admin.content.js";
