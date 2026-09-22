@@ -6,7 +6,7 @@ Need help with your account or a transaction?
 Our support team is here to help.
 
 👨‍💻 <b>Support Agent</b>
-@Codyred
+@Codyredready
 
 ━━━━━━━━━━━━━━━━━━
 <b>Common Issues</b>

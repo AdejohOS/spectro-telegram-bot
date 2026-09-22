@@ -13,8 +13,13 @@ import { Markup } from "telegraf";
 
 export function registerEscrowHandler(bot) {
   bot.on("text", async (ctx, next) => {
+    if (ctx.chat.type !== "private") {
+      return next();
+    }
     const state = getEscrowState(ctx.from.id);
-
+    if (!state) {
+      return next();
+    }
     if (state) {
       if (state.step === "SELLER") {
         const sellerUsername = ctx.message.text.trim();
