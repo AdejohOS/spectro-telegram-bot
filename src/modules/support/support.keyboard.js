@@ -2,7 +2,7 @@ import { Markup } from "telegraf";
 
 export function supportKeyboard() {
   return Markup.inlineKeyboard([
-    [Markup.button.url("💬 Contact Support", "https://t.me/Codyredready")],
+    [Markup.button.url("💬 Contact Support", "https://t.me/Codredready")],
 
     [Markup.button.url("🌍 Join Community", "https://t.me/Spectromileschat")],
 
