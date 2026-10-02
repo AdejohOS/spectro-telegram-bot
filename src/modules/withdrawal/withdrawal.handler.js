@@ -7,6 +7,9 @@ import { withdrawalNetworkKeyboard } from "./withdrawal.keyboard.js";
 
 export function registerWithdrawalHandler(bot) {
   bot.on("text", async (ctx, next) => {
+    if (ctx.chat.type !== "private") {
+      return next();
+    }
     const state = getWithdrawalState(ctx.from.id);
 
     if (!state) {
