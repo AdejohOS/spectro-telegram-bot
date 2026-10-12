@@ -5,8 +5,8 @@ Need help with your account or a transaction?
 Our support team is here to help.
 
 👨‍💻 <b>Support Agent</b>
-@Codredready
-━━━━━━━━━━━━━━━━━━
+@Blvcqyy
+━━━━━━━━━━━━━━━━━━ 
 <b>Common Issues</b>
 💳 Deposit issues
 💸 Withdrawal requests
