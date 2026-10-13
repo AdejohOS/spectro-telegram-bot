@@ -29,6 +29,8 @@ import { registerAdminLookupActions } from "../modules/lookup/lookup.action.js";
 
 import { registerUserActions } from "../modules/users/user.action.js";
 
+import { registerAdminSettingsActions } from "../modules/admin/admin.settings.action.js";
+
 export function registerRoutes(bot) {
   bot.use(loggerMiddleware);
 
@@ -66,6 +68,8 @@ export function registerRoutes(bot) {
   registerAddressActions(bot);
 
   registerAdminLookupActions(bot);
+
+  registerAdminSettingsActions(bot);
 
   // Commands
   // Actions

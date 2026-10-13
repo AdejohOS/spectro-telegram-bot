@@ -15,3 +15,5 @@ export * from "./withdrawals.js";
 
 export * from "./products.js";
 export * from "./orders.js";
+
+export * from "./appSettings.js";
